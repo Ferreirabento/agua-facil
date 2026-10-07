@@ -7,7 +7,7 @@ def conectar():
     conectando.row_factory = sqlite3.Row
     return conectando
 
-def criar_tabela():
+def criar_tabela_produtos():
     conexao = conectar()
     conexao.execute("""
     CREATE TABLE IF NOT EXISTS produtos(
