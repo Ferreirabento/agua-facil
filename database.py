@@ -33,12 +33,10 @@ def adicionar(nome, preco, estoque, estoque_minimo):
 
 def consultar():
     conexao = conectar()
-    conexao.execute("""
+    produtos = conexao.execute("""
     SELECT * FROM prdutos
     WHERE ativo = 1
     ORDER BY nome
-    """)
-    concexao.commit()
+    """).fetchall()
     conexao.close()
-
-    
+    return produtos
