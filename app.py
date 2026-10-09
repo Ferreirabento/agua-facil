@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from database import criar_tabela_produtos
+from database import criar_tabela_produtos, adicionar
 
 app = Flask(__name__)
 
@@ -31,7 +31,7 @@ def produtos():
         }
     ]
 
-    return render_template('produtos.html', produtos=produtos)
+    return render_template('produtos.html', produtos=produtos)    
 
 @app.route('/clientes')
 def clientes():
