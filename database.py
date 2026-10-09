@@ -23,9 +23,22 @@ def criar_tabela_produtos():
 
 def adicionar(nome, preco, estoque, estoque_minimo):
     conexao = conectar()
-    conexao.execute(f"""
-    insert into produtos (nome, preco, estoque, estoque_minimo)
-    values ('{nome}', {preco}, {estoque}, {estoque_minimo})
-    """)
+    conexao.execute("""
+    INSERT INTO produtos (nome, preco, estoque, estoque_minimo)
+    VALUES (?, ?, ?, ?)
+    """, (nome, preco, estoque, estoque_minimo))
     conexao.commit()
     conexao.close()
+
+
+def consultar():
+    conexao = conectar()
+    conexao.execute("""
+    SELECT * FROM prdutos
+    WHERE ativo = 1
+    ORDER BY nome
+    """)
+    concexao.commit()
+    conexao.close()
+
+    
