@@ -11,7 +11,8 @@ def criar_tabela_produtos():
     conexao = conectar()
     conexao.execute("""
     CREATE TABLE IF NOT EXISTS produtos(
-        id nome TEXT PRIMARY KEY,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
         preco REAL NOT NULL,
         estoque INTEGER NOT NULL,
         estoque_minimo INTEGER NOT NULL,
@@ -34,7 +35,7 @@ def adicionar(nome, preco, estoque, estoque_minimo):
 def consultar():
     conexao = conectar()
     produtos = conexao.execute("""
-    SELECT * FROM prdutos
+    SELECT * FROM produtos
     WHERE ativo = 1
     ORDER BY nome
     """).fetchall()
