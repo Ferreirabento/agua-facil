@@ -41,3 +41,24 @@ def consultar():
     """).fetchall()
     conexao.close()
     return produtos
+
+
+def atualizar(id, nome, preco, estoque, estoque_minimo):
+    conexao = conectar()
+    conexao.execute("""
+    UPDATE produtos
+    SET nome = ?, preco = ?, estoque = ?, estoque_minimo = ?
+    WHERE id = ?
+    """, (id, nome, preco, estoque, estoque_minimo))
+    conexao.commit()
+    conexao.close()
+
+
+def deletar(id):
+    conexao = conectar()
+    conexao.execute("""
+    DELETE FROM produtos
+    WHERE id = ?
+    """, (id,))
+    conexao.commit()
+    conexao.close()

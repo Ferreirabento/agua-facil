@@ -32,7 +32,7 @@ def novo_produto():
         estoque = int(request.form['estoque'])
         estoque_minimo = int(request.form['estoque_minimo'])
         adicionar(nome, preco, estoque, estoque_minimo)
-        return redirect(url_for('produtos'))
+        return redirect(url_for('inicio'))
     return render_template('novo_produto.html')
 
 @app.route('/clientes')
