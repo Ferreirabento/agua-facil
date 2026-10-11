@@ -8,7 +8,7 @@
 <body>
     {% extends "base.html" %}
 
-    {% block content %}
+    {% block title %}
     novo produto
     {% endblock %}
     
@@ -62,11 +62,12 @@
         </button>
     </form>
 
-    <a href="/">
+    {% endblock %}
+    
+    <a href="/produtos">
         voltar
     </a>
 
-    {% endblock %}
     
 </body>
 </html>
