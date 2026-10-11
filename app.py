@@ -1,5 +1,5 @@
-from flask import Flask, render_template
-from database import criar_tabela_produtos, consultar
+from flask import Flask, render_template, request, redirect, url_for
+from database import criar_tabela_produtos, consultar, adicionar
 
 app = Flask(__name__)
 
@@ -24,8 +24,15 @@ def sobre():
 def produtos():
     return render_template('produtos.html', produtos=consultar())
 
-@app.route('/produtos/novo')
+@app.route('/produtos/novo', methods=('GET', 'POST'))
 def novo_produto():
+    if request.method == 'POST':
+        nome = request.form['nome']
+        preco = float(request.form['preco'])
+        estoque = int(request.form['estoque'])
+        estoque_minimo = int(request.form['estoque_minimo'])
+        adicionar(nome, preco, estoque, estoque_minimo)
+        return redirect(url_for('produtos'))
     return render_template('novo_produto.html')
 
 @app.route('/clientes')
