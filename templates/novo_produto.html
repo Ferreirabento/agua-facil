@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Novo Produto</title>
-</head>
+</head> 
 <body>
     {% extends "base.html" %}
 
@@ -15,58 +15,25 @@
     {% block content %}
     <h2>novo produto</h2>
     <form method="POST">
-        <label for ="nome">
-            Nome
-        </label>
-        <input
-        type="text"
-        id="nome"
-        name="nome"
-        required
-        >
+        <label for ="nome">Nome</label>
+        <input type="text" id="nome" name="nome" required>
 
-        <label for="preco">
-            preco
-        </label>
+        <label for="preco">preco</label>
 
-        <input
-        type="number"
-        id="preco"
-        name="preco"
-        min="0"
-        required
-        >
+        <input type="number" id="preco" name="preco" min="0" required>
 
-        <label for="estoque">
-            estoque
-        </label>
-        <input
-        type="number"
-        id="estoque"
-        name="estoque"
-        required
-        >
+        <label for="estoque">estoque</label>
+        <input type="number" id="estoque" name="estoque" required>
 
-        <label for="estoque_minimo">
-            estoque minimo
-        </label>
-        <input
-        type="number"
-        id="estoque_minimo"
-        name="estoque_minimo"
-        required
-        >
+        <label for="estoque_minimo">estoque minimo</label>
+        <input type="number" id="estoque_minimo" name="estoque_minimo" required>
 
-        <button type="submit">
-            cadastrar   
-        </button>
+        <button type="submit">cadastrar</button>
     </form>
 
     {% endblock %}
     
-    <a href="/produtos">
-        voltar
-    </a>
+    <a href="/produtos">voltar</a>
 
     
 </body>

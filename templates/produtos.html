@@ -10,22 +10,30 @@
     {% block title %} Produtos {% endblock %}
     {% block content %}
 
-    <h2>Produtos</h2>
+    <h1>Produtos</h1>
 
-    <a href="/produtos/novo">
-        Novo Produto
-    </a>
+    <a href="{{ url_for('novo_produto') }}">Novo Produto</a>
 
-    {% for produto in produtos %}
-
-    <article>
-        <h3>{{produto["nome"]}}</h3>
-        <p>{{"%.2f" | format(produto["preco"])}}</p>
-        <p>{{produto["estoque"]}}</p>
-    </article>
-
-    {% endfor %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                <th>Estoque Minimo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in produtos %}
+            <tr>
+                <td>{{produto["nome"]}}</td>
+                <td>R$ {{"%.2f"|format(produto["preco"])}}</td>
+                <td>{{produto["estoque"]}}</td>
+                <td>{{produto["estoque_minimo"]}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% endblock %}
-    
 </body>
 </html>
