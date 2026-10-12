@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edição de produtos</title>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block title %}
+        Edição de Produtos
+    {% endblock %}
+    {% block content %}
+    <h2>Atualizão</h2>
+    <form method="POST">
+        <label for ="nome">Nome</label>
+        <input type="text" id="nome" name="nome" required value="{{produto['nome']}}">
+        <label for="preco">preco</label>
+        <input type="number" id="preco" name="preco" step="0.1" required value="{{produto['preco']}}">
+        <label for="estoque">estoque</label>
+        <input type="number" id="estoque" name="estoque" required value="{{produto['estoque']}}">
+        <label for="estoque_minimo">estoque minimo</label>
+        <input type="number" id="estoque_minimo" name="estoque_minimo" required value="{{produto['estoque_minimo']}}">
+        <button type="submit">atualizar</button>
+    </form>
+    </form>
+    {% endblock %}
+</body>
+</html>

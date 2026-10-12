@@ -9,56 +9,41 @@ def conectar():
 
 def criar_tabela_produtos():
     conexao = conectar()
-    conexao.execute("""
-    CREATE TABLE IF NOT EXISTS produtos(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nome TEXT NOT NULL,
-        preco REAL NOT NULL,
-        estoque INTEGER NOT NULL,
-        estoque_minimo INTEGER NOT NULL,
-        ativo INTEGER NOT NULL DEFAULT 1
-        )""")
+    conexao.execute("""CREATE TABLE IF NOT EXISTS produtos(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, preco REAL NOT NULL, estoque INTEGER NOT NULL, estoque_minimo INTEGER NOT NULL, ativo INTEGER NOT NULL DEFAULT 1)""")
 
     conexao.commit()
     conexao.close()
 
 def adicionar(nome, preco, estoque, estoque_minimo):
     conexao = conectar()
-    conexao.execute("""
-    INSERT INTO produtos (nome, preco, estoque, estoque_minimo)
-    VALUES (?, ?, ?, ?)
-    """, (nome, preco, estoque, estoque_minimo))
+    conexao.execute("""INSERT INTO produtos (nome, preco, estoque, estoque_minimo) VALUES (?, ?, ?, ?)""", (nome, preco, estoque, estoque_minimo))
     conexao.commit()
     conexao.close()
 
 
 def consultar():
     conexao = conectar()
-    produtos = conexao.execute("""
-    SELECT * FROM produtos
-    WHERE ativo = 1
-    ORDER BY nome
-    """).fetchall()
+    produtos = conexao.execute("""SELECT * FROM produtos WHERE ativo = 1 ORDER BY nome""").fetchall()
     conexao.close()
     return produtos
 
 
 def atualizar(id, nome, preco, estoque, estoque_minimo):
     conexao = conectar()
-    conexao.execute("""
-    UPDATE produtos
-    SET nome = ?, preco = ?, estoque = ?, estoque_minimo = ?
-    WHERE id = ?
-    """, (id, nome, preco, estoque, estoque_minimo))
+    conexao.execute("""UPDATE produtos SET nome = ?, preco = ?, estoque = ?, estoque_minimo = ? WHERE id = ?""", (nome, preco, estoque, estoque_minimo, id))
     conexao.commit()
     conexao.close()
 
 
 def deletar(id):
     conexao = conectar()
-    conexao.execute("""
-    DELETE FROM produtos
-    WHERE id = ?
-    """, (id,))
+    conexao.execute("""DELETE FROM produtos WHERE id = ?""", (id,))
+    conexao.commit()
+    conexao.close()
+
+
+def buscar_produto(id):
+    conexao = conectar()
+    conexao.execute("""SELECT * FROM produtos WHERE id = ?""", (id,)).fetchone()
     conexao.commit()
     conexao.close()

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from database import criar_tabela_produtos, consultar, adicionar, atualizar, deletar
+from database import criar_tabela_produtos, consultar, adicionar, atualizar, deletar, buscar_produto
 
 app = Flask(__name__)
 
@@ -41,9 +41,18 @@ def novo_produto():
         return redirect(url_for('inicio'))
     return render_template('novo_produto.html')
 
-"""@app.route('/clientes')
-def clientes():
-    return render_template('clientes.html')"""
+@app.route('/produtos/<int:id>/editar', methods=('GET', 'POST'))
+def editar_produto(id):
+    produto = buscar_produto(id)
+    if produto is None:
+        return "Produto não encontrado", 400
+    elif request.method == ['POST']:
+        nome = request.form['nome'].strip()
+        preco = float(request.form['preco'])
+        estoque = int(request.form['estoque'])
+        estoque_minimo = int(request.form['estoque_minimo'])
+        atualizar(nome, preco, estoque, estoque_minimo)
+    return render_template('novo_produto.html', produto=produto)
 
 if __name__ == "__main__":
     app.run(debug=True)
