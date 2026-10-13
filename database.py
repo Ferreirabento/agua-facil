@@ -44,6 +44,6 @@ def deletar(id):
 
 def buscar_produto(id):
     conexao = conectar()
-    conexao.execute("""SELECT * FROM produtos WHERE id = ?""", (id,)).fetchone()
-    conexao.commit()
+    resultado = conexao.execute("""SELECT * FROM produtos WHERE id = ?""", (id,)).fetchone()
     conexao.close()
+    return resultado

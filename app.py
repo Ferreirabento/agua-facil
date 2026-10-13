@@ -19,7 +19,7 @@ def sobre():
 def produtos():
     return render_template('produtos.html', produtos=consultar())
 
-@app.route('/produtos/novo', methods=('GET', 'POST'))
+@app.route('/produtos/novo', methods=['GET', 'POST'])
 def novo_produto():
     if request.method == 'POST':
         nome = request.form['nome'].strip()
@@ -41,18 +41,19 @@ def novo_produto():
         return redirect(url_for('inicio'))
     return render_template('novo_produto.html')
 
-@app.route('/produtos/<int:id>/editar', methods=('GET', 'POST'))
+@app.route('/produtos/<int:id>/editar', methods=['GET', 'POST'])
 def editar_produto(id):
     produto = buscar_produto(id)
     if produto is None:
-        return "Produto não encontrado", 400
-    elif request.method == ['POST']:
+        return "Produto não encontrado", 404
+    if request.method == 'POST':
         nome = request.form['nome'].strip()
         preco = float(request.form['preco'])
         estoque = int(request.form['estoque'])
         estoque_minimo = int(request.form['estoque_minimo'])
-        atualizar(nome, preco, estoque, estoque_minimo)
-    return render_template('novo_produto.html', produto=produto)
-
+        atualizar(id, nome, preco, estoque, estoque_minimo)
+        return redirect(url_for('produtos'))
+    return render_template('editar_produtos.html', produto=produto)
+    
 if __name__ == "__main__":
     app.run(debug=True)
