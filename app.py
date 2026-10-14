@@ -54,6 +54,17 @@ def editar_produto(id):
         atualizar(id, nome, preco, estoque, estoque_minimo)
         return redirect(url_for('produtos'))
     return render_template('editar_produtos.html', produto=produto)
+
+@app.route('/produtos/<int:id>/excluir', methods=['GET', 'POST'])
+def excluir_produto(id):
+    produto = buscar_produto(id)
+    if produto is None:
+        return "produto não encontrado", 404
+    if request.method == 'POST':    
+        deletar(id)
+        return redirect(url_for('produtos'))
+    return render_template('produtos.html', produtos=consultar())
+
     
 if __name__ == "__main__":
     app.run(debug=True)

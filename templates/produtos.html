@@ -30,7 +30,12 @@
                 <td>R$ {{"%.2f"|format(produto["preco"])}}</td>
                 <td>{{produto["estoque"]}}</td>
                 <td>{{produto["estoque_minimo"]}}</td>
-                <a href="{{ url_for('editar_produto', id=produto['id']) }}">Editar</a>
+                <td>
+                    <a href="{{ url_for('editar_produto', id=produto['id']) }}">Editar</a>
+                    <form method="post" action=" {{ url_for('excluir_produto', id=produto['id'])}}">
+                        <button>excluir</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
