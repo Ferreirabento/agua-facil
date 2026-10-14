@@ -3,17 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} agua facil {% endblock %}</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <title>{% block title %}Água Fácil{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <header>
-        <h1>Agua Fácil</h1>
+
+    <!-- Topbar moderna com identidade visual de água -->
+    <header class="topbar">
+        <div class="brand">
+            <h1>💧 Água Fácil</h1>
+        </div>
+        <button class="menu-button" type="button" aria-label="Menu">
+            <span>Menu</span>
+        </button>
     </header>
-    <main>
+
+    <!-- Conteúdo Dinâmico da Aplicação -->
+    <main class="app-shell">
         {% block content %}
         {% endblock %}
     </main>
-    
+
+    <!-- Navegação Inferior Mobile-First (Fixa para operação rápida com uma mão) -->
+    <nav class="bottom-nav">
+        <a href="/" class="nav-item">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Início</span>
+        </a>
+        <a href="/pedidos" class="nav-item">
+            <span class="nav-icon">📋</span>
+            <span class="nav-label">Pedidos</span>
+        </a>
+        <a href="/entregas" class="nav-item">
+            <span class="nav-icon">🛵</span>
+            <span class="nav-label">Entregas</span>
+        </a>
+        <a href="/produtos" class="nav-item">
+            <span class="nav-icon">📦</span>
+            <span class="nav-label">Produtos</span>
+        </a>
+        <a href="/caixa" class="nav-item">
+            <span class="nav-icon">💰</span>
+            <span class="nav-label">Caixa</span>
+        </a>
+    </nav>
+
 </body>
 </html>

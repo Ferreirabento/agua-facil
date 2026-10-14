@@ -5,7 +5,7 @@
     --primary: #0284c7;
     --primary-dark: #0369a1;
     --primary-light: #e0f2fe;
-    --background: #f8fafc;
+    --background: #f1f5f9;
     --surface: #ffffff;
     --text: #0f172a;
     --muted: #64748b;
@@ -17,20 +17,19 @@
     --danger: #dc2626;
     --danger-light: #fee2e2;
 
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 16px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
 
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 
-    --transition-fast: 0.15s ease;
-    --transition-normal: 0.25s ease;
+    --transition: 0.2s ease;
 }
 
 /* ========================================
-2. RESET
+2. RESET & BASE
 ======================================== */
 *, *::before, *::after {
     box-sizing: border-box;
@@ -44,7 +43,7 @@ html {
 }
 
 body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background-color: var(--background);
     color: var(--text);
     line-height: 1.5;
@@ -53,56 +52,31 @@ body {
     flex-direction: column;
 }
 
-/* ========================================
-3. BASE
-======================================== */
-img, svg {
-    display: block;
-    max-width: 100%;
-}
-
-input, button, select, textarea {
-    font: inherit;
-    color: inherit;
-}
-
 a {
     color: var(--primary);
     text-decoration: none;
 }
 
-ul, ol {
+ul {
     list-style: none;
 }
 
 /* ========================================
-4. TYPOGRAPHY
+3. TYPOGRAPHY
 ======================================== */
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4 {
     font-weight: 700;
-    line-height: 1.2;
     color: var(--text);
 }
 
-h1 { font-size: 1.5rem; }
-h2 { font-size: 1.25rem; }
-h3 { font-size: 1.1rem; }
+h1 { font-size: 1.35rem; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 1rem; }
 
-p {
-    color: var(--text);
-}
-
-.text-muted {
-    color: var(--muted);
-    font-size: 0.875rem;
-}
-
-.text-success { color: var(--success); }
-.text-warning { color: var(--warning); }
-.text-danger { color: var(--danger); }
+.text-muted { color: var(--muted); font-size: 0.875rem; }
 
 /* ========================================
-5. LAYOUT
+4. LAYOUT & APP SHELL
 ======================================== */
 .app-shell {
     flex: 1;
@@ -110,29 +84,16 @@ p {
     max-width: 1200px;
     margin: 0 auto;
     padding: 1rem;
-    padding-bottom: 5rem; /* Espaço para a barra de navegação inferior no celular */
-}
-
-.container {
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.section-title {
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding-bottom: 5.5rem; /* Espaço para a barra de navegação inferior */
 }
 
 /* ========================================
-6. HEADER
+5. HEADER (TOPO)
 ======================================== */
 .topbar {
     background-color: var(--surface);
     border-bottom: 1px solid var(--border);
-    padding: 0.75rem 1rem;
+    padding: 0.875rem 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -146,32 +107,25 @@ p {
     font-size: 1.25rem;
     color: var(--primary);
     font-weight: 800;
-    letter-spacing: -0.025em;
 }
 
 .menu-button {
-    background: transparent;
-    border: 1px solid var(--border);
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border: none;
     border-radius: var(--radius-sm);
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 0.875rem;
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     cursor: pointer;
     min-height: 40px;
-    min-width: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.menu-button:hover {
-    background-color: var(--primary-light);
-    border-color: var(--primary);
-    color: var(--primary-dark);
-}
-
 /* ========================================
-7. NAVIGATION
+6. BOTTOM NAVIGATION (MOBILE FIRST)
 ======================================== */
 .bottom-nav {
     position: fixed;
@@ -183,9 +137,9 @@ p {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 0.5rem 0;
-    z-index: 100;
-    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+    padding: 0.4rem 0.2rem;
+    z-index: 1000;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .nav-item {
@@ -194,30 +148,27 @@ p {
     align-items: center;
     justify-content: center;
     color: var(--muted);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 500;
-    padding: 0.35rem 0.75rem;
+    padding: 0.3rem 0.5rem;
     border-radius: var(--radius-sm);
-    min-width: 60px;
+    flex: 1;
     min-height: 48px;
-    transition: color var(--transition-fast);
+    transition: color var(--transition);
 }
 
-.nav-item svg, .nav-item i {
+.nav-icon {
     font-size: 1.25rem;
-    margin-bottom: 0.15rem;
+    margin-bottom: 2px;
 }
 
 .nav-item:hover, .nav-item.active {
     color: var(--primary);
-}
-
-.nav-item.active {
     font-weight: 700;
 }
 
 /* ========================================
-8. BUTTONS
+7. BUTTONS (Áreas de toque confortáveis)
 ======================================== */
 .btn {
     display: inline-flex;
@@ -226,14 +177,14 @@ p {
     gap: 0.5rem;
     font-weight: 600;
     font-size: 1rem;
-    padding: 0.75rem 1.25rem;
+    padding: 0.875rem 1.25rem;
     border-radius: var(--radius-md);
     border: 1px solid transparent;
     cursor: pointer;
-    min-height: 48px; /* Área de toque confortável para mobile */
-    transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+    min-height: 48px;
+    width: 100%;
     text-align: center;
-    width: auto;
+    transition: background-color var(--transition), transform 0.1s ease;
 }
 
 .btn:active {
@@ -255,18 +206,9 @@ p {
     color: var(--text);
 }
 
-.btn-secondary:hover {
-    background-color: var(--background);
-    border-color: var(--muted);
-}
-
 .btn-success {
     background-color: var(--success);
     color: #ffffff;
-}
-
-.btn-success:hover {
-    background-color: #15803d;
 }
 
 .btn-warning {
@@ -274,49 +216,29 @@ p {
     color: #ffffff;
 }
 
-.btn-warning:hover {
-    background-color: #b45309;
-}
-
 .btn-danger {
     background-color: var(--danger);
     color: #ffffff;
 }
 
-.btn-danger:hover {
-    background-color: #b91c1c;
-}
-
-.btn-block {
-    display: flex;
-    width: 100%;
-}
-
-.btn:disabled, .btn.disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
 /* ========================================
-9. FORMS
+8. FORMS (Inputs grandes para toque)
 ======================================== */
 form {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.15rem;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 label {
     font-weight: 600;
     font-size: 0.95rem;
-    color: var(--text);
 }
 
 input, select, textarea {
@@ -328,7 +250,7 @@ input, select, textarea {
     background-color: var(--surface);
     color: var(--text);
     min-height: 48px;
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    transition: border-color var(--transition), box-shadow var(--transition);
 }
 
 input:focus, select:focus, textarea:focus {
@@ -337,29 +259,10 @@ input:focus, select:focus, textarea:focus {
     box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
 
-select {
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 1rem center;
-    background-size: 1.25rem;
-    padding-right: 2.5rem;
-}
-
-textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-.form-hint {
-    font-size: 0.8125rem;
-    color: var(--muted);
-}
-
 /* ========================================
-10. CARDS
+9. CARDS & GRID SYSTEM
 ======================================== */
-.card {
+.card, .stat-card, .order-card, .client-card, .stock-item {
     background-color: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -367,48 +270,14 @@ textarea {
     box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
-    gap: 0.875rem;
-    transition: box-shadow var(--transition-fast);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
 }
 
-.card:hover {
-    box-shadow: var(--shadow-md);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 0.75rem;
-}
-
-.card-footer {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid var(--border);
-}
-
-/* ========================================
-11. DASHBOARD
-======================================== */
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
-}
-
-.stat-card {
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem;
-    box-shadow: var(--shadow-sm);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
 }
 
 .stat-card.highlight {
@@ -417,417 +286,61 @@ textarea {
     border: none;
 }
 
-.stat-card.highlight h2,
-.stat-card.highlight p,
-.stat-card.highlight span {
+.stat-card.highlight .stat-label,
+.stat-card.highlight .stat-value {
     color: #ffffff;
 }
 
-.stat-card .stat-value {
+.stat-value {
     font-size: 2rem;
     font-weight: 800;
-    line-height: 1.1;
 }
 
-.stat-card .stat-label {
-    font-size: 0.875rem;
-    color: var(--muted);
-    font-weight: 600;
+.stat-label {
+    font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-}
-
-.stat-card.highlight .stat-label {
-    color: rgba(255, 255, 255, 0.85);
-}
-
-.dashboard-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-}
-
-/* ========================================
-12. ORDERS
-======================================== */
-.orders-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.order-card {
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    box-shadow: var(--shadow-sm);
-}
-
-.order-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 700;
-}
-
-.order-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.order-footer {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-/* ========================================
-13. STOCK
-======================================== */
-.stock-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-}
-
-.stock-item {
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: var(--shadow-sm);
-}
-
-.stock-item.low-stock {
-    border-color: var(--warning);
-    background-color: var(--warning-light);
-}
-
-.stock-item.out-of-stock {
-    border-color: var(--danger);
-    background-color: var(--danger-light);
-}
-
-.stock-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.stock-quantity {
-    font-size: 1.25rem;
+    color: var(--muted);
     font-weight: 700;
 }
 
 /* ========================================
-14. CLIENTS
-======================================== */
-.clients-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-}
-
-.client-card {
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    box-shadow: var(--shadow-sm);
-}
-
-.client-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-/* ========================================
-15. CASH
-======================================== */
-.cash-summary {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.cash-card-total {
-    background: linear-gradient(135deg, var(--success) 0%, #15803d 100%);
-    color: #ffffff;
-    padding: 1.5rem;
-    border-radius: var(--radius-lg);
-    text-align: center;
-    box-shadow: var(--shadow-md);
-}
-
-.cash-card-total .amount {
-    font-size: 2.5rem;
-    font-weight: 800;
-    margin-top: 0.5rem;
-}
-
-.cash-breakdown {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
-}
-
-.cash-method-card {
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.cash-method-card .method-value {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--primary);
-}
-
-/* ========================================
-16. ALERTS / BADGES
+10. BADGES & STATUS
 ======================================== */
 .badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0.25rem 0.625rem;
+    padding: 0.3rem 0.75rem;
     border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 700;
     width: fit-content;
 }
 
-.badge-pending {
-    background-color: var(--warning-light);
-    color: var(--warning);
-}
-
-.badge-preparing {
-    background-color: var(--primary-light);
-    color: var(--primary-dark);
-}
-
-.badge-delivery {
-    background-color: #fef08a;
-    color: #854d0e;
-}
-
-.badge-success, .badge-delivered {
-    background-color: var(--success-light);
-    color: var(--success);
-}
-
-.badge-danger, .badge-cancelled {
-    background-color: var(--danger-light);
-    color: var(--danger);
-}
-
-.alert {
-    padding: 1rem;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    font-size: 0.9rem;
-    border: 1px solid transparent;
-}
-
-.alert-warning {
-    background-color: var(--warning-light);
-    border-color: var(--warning);
-    color: #78350f;
-}
-
-.alert-danger {
-    background-color: var(--danger-light);
-    border-color: var(--danger);
-    color: #7f1d1d;
-}
-
-.alert-success {
-    background-color: var(--success-light);
-    border-color: var(--success);
-    color: #14532d;
-}
+.badge-pending { background-color: var(--warning-light); color: var(--warning); }
+.badge-success { background-color: var(--success-light); color: var(--success); }
+.badge-danger { background-color: var(--danger-light); color: var(--danger); }
 
 /* ========================================
-17. MODALS
+11. RESPONSIVE (TABLETS & DESKTOP)
 ======================================== */
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity var(--transition-normal), visibility var(--transition-normal);
-}
-
-.modal-backdrop.open {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal {
-    background-color: var(--surface);
-    border-radius: var(--radius-lg);
-    width: 100%;
-    max-width: 500px;
-    padding: 1.5rem;
-    box-shadow: var(--shadow-lg);
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    transform: translateY(20px);
-    transition: transform var(--transition-normal);
-}
-
-.modal-backdrop.open .modal {
-    transform: translateY(0);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-close {
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--muted);
-}
-
-/* ========================================
-18. TOASTS
-======================================== */
-.toast-container {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 1100;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    max-width: 350px;
-    width: 100%;
-    pointer-events: none;
-}
-
-.toast {
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--primary);
-    border-radius: var(--radius-md);
-    padding: 1rem;
-    box-shadow: var(--shadow-md);
-    font-size: 0.9rem;
-    pointer-events: auto;
-    animation: slideIn 0.3s ease forwards;
-}
-
-.toast.success { border-left-color: var(--success); }
-.toast.warning { border-left-color: var(--warning); }
-.toast.danger { border-left-color: var(--danger); }
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-/* ========================================
-19. RESPONSIVE
-======================================== */
-/* Tablet (min-width: 768px) */
 @media (min-width: 768px) {
     .app-shell {
         padding: 2rem;
-        padding-bottom: 3rem;
     }
-
     .dashboard-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-
-    .cash-breakdown {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .orders-list, .stock-list, .clients-list {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-    }
-
     .bottom-nav {
-        display: none; /* Oculta a nav inferior em tablets/desktops onde pode ser usada barra lateral ou superior */
+        display: none; /* Oculta barra inferior no tablet/desktop e usa layout superior */
+    }
+    .app-shell {
+        padding-bottom: 2rem;
     }
 }
 
-/* Desktop (min-width: 1024px) */
 @media (min-width: 1024px) {
     .dashboard-grid {
         grid-template-columns: repeat(3, 1fr);
-    }
-
-    .orders-list, .stock-list, .clients-list {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .topbar {
-        padding: 1rem 2rem;
-    }
-
-    .brand h1 {
-        font-size: 1.5rem;
-    }
-}
-
-/* ========================================
-20. ACCESSIBILITY
-======================================== */
-:focus-visible {
-    outline: 3px solid var(--primary);
-    outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
     }
 }
