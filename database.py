@@ -10,7 +10,17 @@ def conectar():
 def criar_tabela_produtos():
     conexao = conectar()
     conexao.execute("""CREATE TABLE IF NOT EXISTS produtos(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, preco REAL NOT NULL, estoque INTEGER NOT NULL, estoque_minimo INTEGER NOT NULL, ativo INTEGER NOT NULL DEFAULT 1)""")
+    conexao.commit()
+    conexao.close()
 
+def criar_tabela_clientes():
+    conexao = conectar()
+    conexao.execute("""
+    CREATE TABLE IF NOT EXIST clientes (
+    id INTERGER PRIMARY KEY AUTOINCREMENT,
+    nomeCliente TEXT NOT NULL,
+    telefone TEXT)
+    """)
     conexao.commit()
     conexao.close()
 
