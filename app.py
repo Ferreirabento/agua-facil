@@ -65,6 +65,10 @@ def excluir_produto(id):
         return redirect(url_for('produtos'))
     return render_template('produtos.html', produtos=consultar())
 
+
+@app.route('/clientes')
+def clientes():
+    return render_template('clientes.html')
     
 if __name__ == "__main__":
     app.run(debug=True)
