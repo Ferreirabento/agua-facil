@@ -69,6 +69,11 @@ def excluir_produto(id):
 @app.route('/clientes')
 def clientes():
     return render_template('clientes.html')
-    
+
+@app.route('/clientes/novo')
+def novo_cliente():
+    return render_template('novo_cliente.html')
+
+
 if __name__ == "__main__":
     app.run(debug=True)

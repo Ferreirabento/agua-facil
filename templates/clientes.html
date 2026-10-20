@@ -6,14 +6,28 @@
     <title>Clientes</title>
 </head>
 <body>
-    { % extends "base.html" % }
+    {% extends "base.html" %}
+    {% block title %} Clientes {% endblock %}
+    {% block content %}
 
-    { % block title %}
-    Clientes
-    { % endblock %}
+    <h1>Clientes</h1>
 
-    { % block content % }
+    <a href="{{ url_for('novo_cliente') }}"> Novo Cliente</a>
 
-    { % endblock % }
+    <table>
+        <thead>
+            <th>Nome</th>
+            <th>Telefone</th>
+        </thead>
+        <Tbody>
+            {% for clinte in clintes %}
+            <tr>>
+                <td>{{cliente["nome"]}}</td>
+                <td>{{cliente["telefone"]}}</td>
+            </tr>
+            {% endfor %}
+        </Tbody>
+    </table>
+    {% endblock %}
 </body>
 </html>
