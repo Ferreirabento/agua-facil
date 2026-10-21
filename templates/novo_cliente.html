@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Casdastro de Novo Cliente</title>
 </head>
 <body>
     {% extends "base.html" %}
-    {% block content %}
+    {% block title %} Novo Cliente {% endblock %}
 
-    <h1>Novo Cliente</h1>
+    {% block content %}
+    <h2>Novo Cliente</h2>
+    <form action="POST">
+        <label for="nomeCliente">Nome</label>
+        <input type="text" id="nomeCliente" name="nomeCliente" required>
+        <label for="telefone">telefone</label>
+        <input type="text" id="telefone" name="telefone" required>
+        <button type="submit">cadastrar</button>
+        <a href="/clientes">voltar</a>
+    </form>
     {% endblock %}
+    
 </body>
 </html>

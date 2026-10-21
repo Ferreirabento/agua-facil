@@ -17,9 +17,11 @@ def criar_tabela_clientes():
     conexao = conectar()
     conexao.execute("""
     CREATE TABLE IF NOT EXIST clientes (
-    id INTERGER PRIMARY KEY AUTOINCREMENT,
+    id_cliente INTERGER PRIMARY KEY AUTOINCREMENT,
+    id_produtos INTERGER,
     nomeCliente TEXT NOT NULL,
-    telefone TEXT)
+    telefone TEXT,
+    CONSTRAINT fk_proClinte FOREIGN KEY (id_produtos) REFERENCES produtos (id)
     """)
     conexao.commit()
     conexao.close()
