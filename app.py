@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
-from database import criar_tabela_produtos, consultar, adicionar, atualizar, deletar, buscar_produto
+from database import criar_tabela_produtos, criar_tabela_clientes, consultar, consultar_clientes, adicionar, adicionar_clientes, atualizar, deletar, buscar_produto
 
 app = Flask(__name__)
 
 criar_tabela_produtos()
+criar_tabela_clientes()
 
 @app.route('/')
 def inicio():
@@ -65,14 +66,24 @@ def excluir_produto(id):
         return redirect(url_for('produtos'))
     return render_template('produtos.html', produtos=consultar())
 
-
 @app.route('/clientes')
 def clientes():
-    return render_template('clientes.html')
+    return render_template('clientes.html', clientes=consultar_clientes())
 
-@app.route('/clientes/novo')
+@app.route('/clientes/novo', methods=['GET', 'POST'])
 def novo_cliente():
+    if request.method == 'POST':
+        nome = request.form['nome'].strip()
+        if not nome:
+            return "Nome do cliente é obrigatorio", 400
+        try:
+            telefone = str(request.form['telefone']).strip()
+        except ValueError:
+            return "Necessario valor valido", 400
+        adicionar_clientes(nome, telefone)
+        return redirect(url_for('inicio'))
     return render_template('novo_cliente.html')
+
 
 
 if __name__ == "__main__":

@@ -15,16 +15,21 @@ def criar_tabela_produtos():
 
 def criar_tabela_clientes():
     conexao = conectar()
-    conexao.execute("""
-    CREATE TABLE IF NOT EXIST clientes (
-    id_cliente INTERGER PRIMARY KEY AUTOINCREMENT,
-    id_produtos INTERGER,
-    nomeCliente TEXT NOT NULL,
-    telefone TEXT,
-    CONSTRAINT fk_proClinte FOREIGN KEY (id_produtos) REFERENCES produtos (id)
-    """)
+    conexao.execute("""CREATE TABLE IF NOT EXISTS clientes(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, telefone TEXT, ativo INTEGER)""")
     conexao.commit()
     conexao.close()
+
+def adicionar_clientes(nome, telefone):
+    conexao = conectar()
+    conexao.execute("""INSERT INTO clientes (nome, telefone) VALUES (?, ?)""", (nome, telefone))
+    conexao.commit()
+    conexao.close()
+
+def consultar_clientes():
+    conexao = conectar()
+    clientes = conexao.execute("""SELECT * FROM clientes WHERE ativo = 1 ORDER BY nome""").fetchall()
+    conexao.close()
+    return clientes
 
 def adicionar(nome, preco, estoque, estoque_minimo):
     conexao = conectar()
