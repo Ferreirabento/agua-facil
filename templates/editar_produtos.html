@@ -7,9 +7,7 @@
 </head>
 <body>
     {% extends "base.html" %}
-    {% block title %}
-        Edição de Produtos
-    {% endblock %}
+    {% block title %}Edição de Produtos{% endblock %}
     {% block content %}
     <h2>Atualização</h2>
     <form method="POST">
@@ -22,7 +20,6 @@
         <label for="estoque_minimo">estoque minimo</label>
         <input type="number" id="estoque_minimo" name="estoque_minimo" required value="{{produto['estoque_minimo']}}">
         <button type="submit">atualizar</button>
-    </form>
     </form>
     {% endblock %}
 </body>

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from database import criar_tabela_produtos, criar_tabela_clientes, consultar, consultar_clientes, adicionar, adicionar_clientes, atualizar, deletar, buscar_produto
+from database import criar_tabela_produtos, criar_tabela_clientes, consultar, consultar_clientes, adicionar, adicionar_clientes, atualizar, atualizar_clietes, deletar, buscar_produto, buscar_cliente
 
 app = Flask(__name__)
 
@@ -83,6 +83,19 @@ def novo_cliente():
         adicionar_clientes(nome, telefone)
         return redirect(url_for('inicio'))
     return render_template('novo_cliente.html')
+
+
+@app.route('/clientes/<int:id>/editar', methods=['GET', 'POST'])
+def editar_clientes(id):
+    cliente = buscar_cliente(id)
+    if cliente is None:
+        return "Cliente não encontrado", 404
+    if request.method == 'POST':
+        nome = request.form['nome'].strip()
+        telefone = request.form['telefone'].strip()
+        atualizar_clietes(id, nome, telefone)
+        return redirect(url_for('clientes'))
+    return render_template('editar_clientes.html', cliente=cliente)
 
 
 

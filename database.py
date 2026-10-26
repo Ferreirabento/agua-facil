@@ -31,6 +31,19 @@ def consultar_clientes():
     conexao.close()
     return clientes
 
+def atualizar_clietes(id, nome, telefone):
+    conecxao = conectar()
+    conecxao.execute("UPDATE clientes SET nome = ?, telefone = ? WHERE id = ?", (nome, telefone, id))
+    conecxao.commit()
+    conecxao.close()
+
+def buscar_cliente(id):
+    concxao = conectar()
+    cliente = concxao.execute("SELECT * FROM clientes WHERE id = ?", (id,)).fetchone()
+    concxao.close()
+    return cliente
+    
+
 def adicionar(nome, preco, estoque, estoque_minimo):
     conexao = conectar()
     conexao.execute("""INSERT INTO produtos (nome, preco, estoque, estoque_minimo) VALUES (?, ?, ?, ?)""", (nome, preco, estoque, estoque_minimo))

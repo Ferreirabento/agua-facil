@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edição de clientes</title>
+</head>
+<body>
+    {% extend "base.html" %}
+    {% block title %}Edição de clientes{% endblock%}
+    {% block content %}
+    <h2>Atualização</h2>
+    <form method="POST">
+        <label for="nome">Nome</label>
+        <input type="text" name="nome" id="nome" required value="{{cliente['nome']}}">
+        <label for="telefone">Telefone</label>
+        <input type="text" name="telefone" id="telefone" required value="{{cliente['telefone']}}">
+        <button type="submit">atualizar</button>
+    </form>
+    {% endblock %}
+    
+</body>
+</html>

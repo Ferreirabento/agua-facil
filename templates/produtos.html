@@ -32,6 +32,8 @@
                 <td>{{produto["estoque_minimo"]}}</td>
                 <td>
                     <a href="{{ url_for('editar_produto', id=produto['id']) }}">Editar</a>
+                </td>
+                <td>
                     <form method="post" action=" {{ url_for('excluir_produto', id=produto['id'])}}">
                         <button>excluir</button>
                     </form>
