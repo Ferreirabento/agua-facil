@@ -344,3 +344,21 @@ input:focus, select:focus, textarea:focus {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+/* Estilo das células e cabeçalhos */
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+/* Destaque para o cabeçalho */
+thead th {
+    background-color: #007eff;
+    color: #ffffff;
+}
+
+/* Efeito listrado nas linhas do corpo */
+tbody tr:nth-child(even) {
+    background-color: #f3f3f3;
+}
