@@ -27,8 +27,8 @@
                 <td>{{cliente["nome"]}}</td>
                 <td>{{cliente["telefone"]}}</td>
                 <td>
-                    <form method="post" action="{{ url_for('editar_clientes', id=cliente['id']) }}">
-                        <button>atualizar</button>
+                    <form method="get" action="{{ url_for('editar_clientes', id=cliente['id']) }}">
+                        <button type="submit">Atualizar</button>
                     </form>
                 </td>
             </tr>

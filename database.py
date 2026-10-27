@@ -31,15 +31,15 @@ def consultar_clientes():
     conexao.close()
     return clientes
 
-def atualizar_clietes(id, nome, telefone):
+def atualizar_clientes(id, nome, telefone):
     conecxao = conectar()
-    conecxao.execute("UPDATE clientes SET nome = ?, telefone = ? WHERE id = ?", (nome, telefone, id))
+    conecxao.execute("""UPDATE clientes SET nome = ?, telefone = ? WHERE id = ?""", (nome, telefone, id))
     conecxao.commit()
     conecxao.close()
 
 def buscar_cliente(id):
     concxao = conectar()
-    cliente = concxao.execute("SELECT * FROM clientes WHERE id = ?", (id,)).fetchone()
+    cliente = concxao.execute("""SELECT * FROM clientes WHERE id = ?""", (id,)).fetchone()
     concxao.close()
     return cliente
     

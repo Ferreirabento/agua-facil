@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from database import criar_tabela_produtos, criar_tabela_clientes, consultar, consultar_clientes, adicionar, adicionar_clientes, atualizar, atualizar_clietes, deletar, buscar_produto, buscar_cliente
+from database import criar_tabela_produtos, criar_tabela_clientes, consultar, consultar_clientes, adicionar, adicionar_clientes, atualizar, atualizar_clientes, deletar, buscar_produto, buscar_cliente
 
 app = Flask(__name__)
 
@@ -93,7 +93,7 @@ def editar_clientes(id):
     if request.method == 'POST':
         nome = request.form['nome'].strip()
         telefone = request.form['telefone'].strip()
-        atualizar_clietes(id, nome, telefone)
+        atualizar_clientes(id, nome, telefone)
         return redirect(url_for('clientes'))
     return render_template('editar_clientes.html', cliente=cliente)
 
