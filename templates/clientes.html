@@ -13,6 +13,7 @@
     <h1>Clientes</h1>
 
     <a href="{{ url_for('novo_cliente') }}"> Novo Cliente</a>
+    <a href="{{ url_for('inicio')}}">inicio</a>
 
     <table>
         <thead>
@@ -29,6 +30,11 @@
                 <td>
                     <form method="get" action="{{ url_for('editar_clientes', id=cliente['id']) }}">
                         <button type="submit">Atualizar</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="post" action=" {{ url_for('excluir_cliente', id=cliente['id']) }}">
+                        <button>excluir</button>
                     </form>
                 </td>
             </tr>

@@ -42,6 +42,12 @@ def buscar_cliente(id):
     cliente = concxao.execute("""SELECT * FROM clientes WHERE id = ?""", (id,)).fetchone()
     concxao.close()
     return cliente
+
+def deletar_cliente(id):
+    conexao = conectar()
+    conexao.execute("""DELETE FROM clientes WHERE id = ?""", (id,))
+    conexao.commit()
+    conexao.close()
     
 
 def adicionar(nome, preco, estoque, estoque_minimo):

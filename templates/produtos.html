@@ -13,6 +13,7 @@
     <h1>Produtos</h1>
 
     <a href="{{ url_for('novo_produto') }}">Novo Produto</a>
+    <a href="{{ url_for('inicio')}}">inicio</a>
 
     <table>
         <thead>
@@ -31,10 +32,12 @@
                 <td>{{produto["estoque"]}}</td>
                 <td>{{produto["estoque_minimo"]}}</td>
                 <td>
-                    <a href="{{ url_for('editar_produto', id=produto['id']) }}">Editar</a>
+                    <form method="get" action="{{ url_for('editar_produto', id=produto['id']) }}">
+                        <button>Atualizar</button>
+                    </form>
                 </td>
                 <td>
-                    <form method="post" action=" {{ url_for('excluir_produto', id=produto['id'])}}">
+                    <form method="post" action=" {{ url_for('excluir_produto', id=produto['id']) }}">
                         <button>excluir</button>
                     </form>
                 </td>
