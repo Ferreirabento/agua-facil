@@ -5,6 +5,7 @@ bancoDeDados = "aguaFacil.sql"
 def conectar():
     conectando = sqlite3.connect(bancoDeDados)
     conectando.row_factory = sqlite3.Row
+    conectando.execute("PRAGMA foreign_key = ON")
     return conectando
 
 def criar_tabela_produtos():
@@ -21,26 +22,15 @@ def criar_tabela_clientes():
 
 def criar_tabelas_pedidos():
     conecxao = conectar()
-    conectar.execute("""
-    CREATE TABLE IF NOT EXISTS pedidos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    cliente_id INTEGER NOT NULL,
-    data_pedido TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'Pendente',
-    ativo INTEGER NOT NULL DEFAULT 1,
-    FOREIGN KEY (cliente_id) REFERENCES clientes(id));""")
+    conectar.execute("""CREATE TABLE pedidos (id INTEGER PRIMARY KEY AUTOINCREMENT, cliente_id INTEGER NOT NULL, data_pedido TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'Pendente', ativo INTEGER NOT NULL DEFAULT 1, FOREIGN KEY (cliente_id) REFERENCES clientes(id));""")
+    conecxao.commit()
+    conecxao.close()
 
 def criar_tabela_iten_pedido():
     conexao = conectar()
-    conectar.execute("""
-    CREATE TABLE IF NOT EXISTS itens_pedido (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    pedido_id INTEGER NOT NULL,
-    produto_id INTEGER NOT NULL,
-    quantidade INTEGER NOT NULL,
-    preco_unitario REAL NOT NULL,
-    FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
-    FOREIGN KEY (produto_id) REFERENCES produtos(id));""")
+    conexao.execute("""CREATE TABLE itens_pedido (id INTEGER PRIMARY KEY AUTOINCREMENT, pedido_id INTEGER NOT NULL, produto_id INTEGER NOT NULL, quantidade INTEGER NOT NULL, preco_unitario REAL NOT NULL, FOREIGN KEY (pedido_id) REFERENCES pedidos(id), FOREIGN KEY (produto_id) REFERENCES produtos(id));""")
+    conexao.commit()
+    conexao.close()
 
 def adicionar_clientes(nome, telefone):
     conexao = conectar()
