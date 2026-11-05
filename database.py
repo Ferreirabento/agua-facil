@@ -22,13 +22,19 @@ def criar_tabela_clientes():
 
 def criar_tabelas_pedidos():
     conecxao = conectar()
-    conectar.execute("""CREATE TABLE pedidos (id INTEGER PRIMARY KEY AUTOINCREMENT, cliente_id INTEGER NOT NULL, data_pedido TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'Pendente', ativo INTEGER NOT NULL DEFAULT 1, FOREIGN KEY (cliente_id) REFERENCES clientes(id));""")
+    conecxao.execute("""CREATE TABLE IF NOT EXISTS pedidos (id INTEGER PRIMARY KEY AUTOINCREMENT, cliente_id INTEGER NOT NULL, data_pedido TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'Pendente', ativo INTEGER NOT NULL DEFAULT 1, FOREIGN KEY (cliente_id) REFERENCES clientes(id))""")
     conecxao.commit()
     conecxao.close()
 
+def consultar_pedidos():
+    concxao = conectar()
+    pedidos = concxao.execute(""" SELECT * FROM pedidos WHERE ativo = 1 ORDER BY id""").fetchall()
+    concxao.close()
+    return pedidos
+
 def criar_tabela_iten_pedido():
     conexao = conectar()
-    conexao.execute("""CREATE TABLE itens_pedido (id INTEGER PRIMARY KEY AUTOINCREMENT, pedido_id INTEGER NOT NULL, produto_id INTEGER NOT NULL, quantidade INTEGER NOT NULL, preco_unitario REAL NOT NULL, FOREIGN KEY (pedido_id) REFERENCES pedidos(id), FOREIGN KEY (produto_id) REFERENCES produtos(id));""")
+    conexao.execute("""CREATE TABLE IF NOT EXISTS itens_pedido (id INTEGER PRIMARY KEY AUTOINCREMENT, pedido_id INTEGER NOT NULL, produto_id INTEGER NOT NULL, quantidade INTEGER NOT NULL, preco_unitario REAL NOT NULL, FOREIGN KEY (pedido_id) REFERENCES pedidos(id), FOREIGN KEY (produto_id) REFERENCES produtos(id))""")
     conexao.commit()
     conexao.close()
 

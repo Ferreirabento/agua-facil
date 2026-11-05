@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from database import criar_tabela_produtos, criar_tabela_clientes, criar_tabelas_pedidos, criar_tabela_iten_pedido, consultar, consultar_clientes, adicionar, adicionar_clientes, atualizar, atualizar_clientes, deletar, deletar_cliente, buscar_produto, buscar_cliente
+from database import criar_tabela_produtos, criar_tabela_clientes, criar_tabelas_pedidos, criar_tabela_iten_pedido, consultar, consultar_clientes, consultar_pedidos, adicionar, adicionar_clientes, atualizar, atualizar_clientes, deletar, deletar_cliente, buscar_produto, buscar_cliente
 
 app = Flask(__name__)
 
@@ -108,6 +108,10 @@ def excluir_cliente(id):
         deletar_cliente(id)
         return redirect(url_for('clientes'))
     return render_template('clientes.html', clinte=consultar())
+
+@app.route('/pedidos')
+def pedidos():
+    return render_template('pedidos.html', pedidos=consultar_pedidos())
 
 if __name__ == "__main__":
     app.run(debug=True)
