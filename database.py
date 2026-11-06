@@ -32,6 +32,12 @@ def consultar_pedidos():
     concxao.close()
     return pedidos
 
+def adicionar_pedidos(data, status):
+    conexao = conectar()
+    conexao.execute("""INSERT INTO pedidos (data_pedido, status) VALUES (?, ?)""", (data, status))
+    conexao.commit()
+    conexao.close()
+
 def criar_tabela_iten_pedido():
     conexao = conectar()
     conexao.execute("""CREATE TABLE IF NOT EXISTS itens_pedido (id INTEGER PRIMARY KEY AUTOINCREMENT, pedido_id INTEGER NOT NULL, produto_id INTEGER NOT NULL, quantidade INTEGER NOT NULL, preco_unitario REAL NOT NULL, FOREIGN KEY (pedido_id) REFERENCES pedidos(id), FOREIGN KEY (produto_id) REFERENCES produtos(id))""")

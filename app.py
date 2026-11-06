@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from database import criar_tabela_produtos, criar_tabela_clientes, criar_tabelas_pedidos, criar_tabela_iten_pedido, consultar, consultar_clientes, consultar_pedidos, adicionar, adicionar_clientes, atualizar, atualizar_clientes, deletar, deletar_cliente, buscar_produto, buscar_cliente
+from database import criar_tabela_produtos, criar_tabela_clientes, criar_tabelas_pedidos, criar_tabela_iten_pedido, consultar, consultar_clientes, consultar_pedidos, adicionar, adicionar_clientes, adicionar_pedidos, atualizar, atualizar_clientes, deletar, deletar_cliente, buscar_produto, buscar_cliente
 
 app = Flask(__name__)
 
@@ -112,6 +112,20 @@ def excluir_cliente(id):
 @app.route('/pedidos')
 def pedidos():
     return render_template('pedidos.html', pedidos=consultar_pedidos())
+
+@app.route('/pedidos/novo', methods=['GET', 'POST'])
+def novo_pedido():
+    if request.method == 'POST':
+        data = request.form['data'].strip()
+        if not data:
+            return "data do pedido é obrigatorio", 400
+        try:
+            status = str(request.method['status'].strip())
+        except ValueError:
+            return "Necessario valor valido", 400
+            adicionar_pedidos(data, status)
+        return redirect(url_for('inicio'))
+    return render_template('novo_pedido.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novo Pedido</title>
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block title %} Novo Pedido {% endblock %}
+
+    {% block content %}
+    <h2>Novo Pedido</h2>
+    <form method="POST">
+        <label for="data">data</label>
+        <input type="text" id="data" name="data" required>
+        <label for="status">status</label>
+        <input type="text" id="status" name="status" required>
+        <button type="submit">cadastrar</button>
+        <a href="/pedidos">voltar</a>
+    </form>
+    {% endblock %}
+    
+</body>
+</html>
