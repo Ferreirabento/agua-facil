@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 bancoDeDados = "aguaFacil.sql"
 
@@ -32,11 +33,14 @@ def consultar_pedidos():
     concxao.close()
     return pedidos
 
-def adicionar_pedidos(data, status):
+def adicionar_pedidos(cliente_id):
     conexao = conectar()
-    conexao.execute("""INSERT INTO pedidos (data_pedido, status) VALUES (?, ?)""", (data, status))
+    data_pedido = datetime.now().isoformat(timespec="seconds")
+    conexao.execute("""INSERT INTO pedidos (cliente_id, data_pedido) VALUES (?, ?)""", (cliente_id, data_pedido))
+    pedido_id = conexao.lastrowid
     conexao.commit()
     conexao.close()
+    return pedido_id
 
 def criar_tabela_iten_pedido():
     conexao = conectar()

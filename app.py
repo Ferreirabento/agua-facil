@@ -116,16 +116,18 @@ def pedidos():
 @app.route('/pedidos/novo', methods=['GET', 'POST'])
 def novo_pedido():
     if request.method == 'POST':
-        data = request.form['data'].strip()
-        if not data:
-            return "data do pedido é obrigatorio", 400
         try:
-            status = str(request.method['status'].strip())
-        except ValueError:
-            return "Necessario valor valido", 400
-            adicionar_pedidos(data, status)
-        return redirect(url_for('inicio'))
-    return render_template('novo_pedido.html')
+            cliente_id = int(request.form['cliente_id'])
+        except (ValueError, KeyError):
+            return "selecione um cliente valido", 400
+        cliente = buscar_cliente(cliente_id)
+        if cliente is None:
+            return "clinete não encontrado", 400
+        pedido_id = adicionar_pedidos(cliente_id)
+        return redirect(url_for('pedidos'))
+    cliente = consultar_clientes()
+    return render_template('novo_pedido.html', clientes=clientes)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
