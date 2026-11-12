@@ -120,12 +120,12 @@ def novo_pedido():
             cliente_id = int(request.form['cliente_id'])
         except (ValueError, KeyError):
             return "selecione um cliente valido", 400
-        listar_cliente = consultar_clientes()
+        cliente = buscar_cliente(cliente_id)
         if cliente is None:
             return "clinete não encontrado", 400
         pedido_id = adicionar_pedidos(cliente_id)
         return redirect(url_for('pedidos'))
-    cliente = consultar_clientes()
+    listar_cliente = consultar_clientes()
     return render_template('novo_pedido.html', clientes=listar_cliente)
 
 
