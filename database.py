@@ -6,7 +6,7 @@ bancoDeDados = "aguaFacil.sql"
 def conectar():
     conectando = sqlite3.connect(bancoDeDados)
     conectando.row_factory = sqlite3.Row
-    conectando.execute("PRAGMA foreign_key = ON")
+    conectando.execute("PRAGMA foreign_keys = ON")
     return conectando
 
 def criar_tabela_produtos():
@@ -29,7 +29,7 @@ def criar_tabelas_pedidos():
 
 def consultar_pedidos():
     concxao = conectar()
-    pedidos = concxao.execute(""" SELECT * FROM pedidos WHERE ativo = 1 ORDER BY id""").fetchall()
+    pedidos = concxao.execute("""SELECT * FROM pedidos WHERE ativo = 1 ORDER BY id""").fetchall()
     concxao.close()
     return pedidos
 

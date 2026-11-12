@@ -6,7 +6,7 @@
     <label for="cliente_id">Cliente:</label>
     <select name="cliente_id" id="cliente_id" required>
         <option value="">Selecione um cliente</option>
-        {% for cliente in Cliente %}
+        {% for cliente in clientes %}
             <option value="{{ cliente['id'] }}">
                 {{ cliente['nome'] }}
             </option>
