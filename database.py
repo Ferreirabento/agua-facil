@@ -11,19 +11,33 @@ def conectar():
 
 def criar_tabela_produtos():
     conexao = conectar()
-    conexao.execute("""CREATE TABLE IF NOT EXISTS produtos(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, preco REAL NOT NULL, estoque INTEGER NOT NULL, estoque_minimo INTEGER NOT NULL, ativo INTEGER NOT NULL DEFAULT 1)""")
+    conexao.execute("""CREATE TABLE IF NOT EXISTS produtos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL, preco REAL NOT NULL,
+    estoque INTEGER NOT NULL,
+    estoque_minimo INTEGER NOT NULL,
+    ativo INTEGER NOT NULL DEFAULT 1)""")
     conexao.commit()
     conexao.close()
 
 def criar_tabela_clientes():
     conexao = conectar()
-    conexao.execute("""CREATE TABLE IF NOT EXISTS clientes(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT NOT NULL, telefone TEXT, ativo INTEGER NOT NULL DEFAULT 1)""")
+    conexao.execute("""CREATE TABLE IF NOT EXISTS clientes(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    telefone TEXT,
+    nome TEXT NOT NULL,
+    ativo INTEGER NOT NULL DEFAULT 1)""")
     conexao.commit()
     conexao.close()
 
 def criar_tabelas_pedidos():
     conecxao = conectar()
-    conecxao.execute("""CREATE TABLE IF NOT EXISTS pedidos (id INTEGER PRIMARY KEY AUTOINCREMENT, cliente_id INTEGER NOT NULL, data_pedido TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'Pendente', ativo INTEGER NOT NULL DEFAULT 1, FOREIGN KEY (cliente_id) REFERENCES clientes(id))""")
+    conecxao.execute("""CREATE TABLE IF NOT EXISTS pedidos (id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cliente_id INTEGER NOT NULL,
+    data_pedido TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'Pendente',
+    ativo INTEGER NOT NULL DEFAULT 1,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id))""")
     conecxao.commit()
     conecxao.close()
 
@@ -44,9 +58,25 @@ def adicionar_pedidos(cliente_id):
 
 def criar_tabela_iten_pedido():
     conexao = conectar()
-    conexao.execute("""CREATE TABLE IF NOT EXISTS itens_pedido (id INTEGER PRIMARY KEY AUTOINCREMENT, pedido_id INTEGER NOT NULL, produto_id INTEGER NOT NULL, quantidade INTEGER NOT NULL, preco_unitario REAL NOT NULL, FOREIGN KEY (pedido_id) REFERENCES pedidos(id), FOREIGN KEY (produto_id) REFERENCES produtos(id))""")
+    conexao.execute("""CREATE TABLE IF NOT EXISTS itens_pedido (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pedido_id INTEGER NOT NULL,
+    produto_id INTEGER NOT NULL,
+    quantidade INTEGER NOT NULL,
+    preco_unitario REAL NOT NULL,
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
+    FOREIGN KEY (produto_id) REFERENCES produtos(id))""")
     conexao.commit()
     conexao.close()
+
+def adicionar_itens_pedidos(pedido_id, produto_id, quantidade, preco_unitario):
+    conexao = conectar()
+    conexao.execute(""" INSERT INTO itens_pedido (pedido_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)""", (pedido_id, produto_id, quantidade, preco_unitario))
+    item_id = conexao.lastrowid
+    conexao.commit()
+    conexao.close()
+    return item_id
+
 
 def adicionar_clientes(nome, telefone):
     conexao = conectar()

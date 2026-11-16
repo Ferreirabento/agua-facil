@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from database import criar_tabela_produtos, criar_tabela_clientes, criar_tabelas_pedidos, criar_tabela_iten_pedido, consultar, consultar_clientes, consultar_pedidos, adicionar, adicionar_clientes, adicionar_pedidos, atualizar, atualizar_clientes, deletar, deletar_cliente, buscar_produto, buscar_cliente
+from database import criar_tabela_produtos, criar_tabela_clientes, criar_tabelas_pedidos, criar_tabela_iten_pedido, consultar, consultar_clientes, consultar_pedidos, adicionar, adicionar_clientes, adicionar_pedidos, adicionar_itens_pedidos, atualizar, atualizar_clientes, deletar, deletar_cliente, buscar_produto, buscar_cliente
 
 app = Flask(__name__)
 
@@ -120,10 +120,19 @@ def novo_pedido():
             cliente_id = int(request.form['cliente_id'])
         except (ValueError, KeyError):
             return "selecione um cliente valido", 400
+        try:
+            produto_id = int(request.form['produto_id'])
+        except (ValueError, KeyError):
+            return "selcione um produto valido", 400
+        try:
+            quantidade = int(request.form['quantidade'])
+        except (ValueError, KeyError):
+            return "Use uma quantidade valida", 400 
         cliente = buscar_cliente(cliente_id)
         if cliente is None:
             return "clinete não encontrado", 400
         pedido_id = adicionar_pedidos(cliente_id)
+        item_id = adicionar_itens_pedidos(pedido_id, produto_id, quantidade)
         return redirect(url_for('pedidos'))
     listar_cliente = consultar_clientes()
     return render_template('novo_pedido.html', clientes=listar_cliente)
