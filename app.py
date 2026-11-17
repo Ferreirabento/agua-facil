@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
-from database import criar_tabela_produtos, criar_tabela_clientes, criar_tabelas_pedidos, criar_tabela_iten_pedido, consultar, consultar_clientes, consultar_pedidos, adicionar, adicionar_clientes, adicionar_pedidos, adicionar_itens_pedidos, atualizar, atualizar_clientes, deletar, deletar_cliente, buscar_produto, buscar_cliente
+from database import (criar_tabela_produtos, adicionar_produtos, consultar_produtos, atualizar_produtos, deletar_produtos, buscar_produto,
+criar_tabela_clientes, adicionar_clientes, consultar_clientes, atualizar_clientes, buscar_cliente, deletar_cliente,
+criar_tabelas_pedidos, consultar_pedidos, adicionar_pedidos, 
+criar_tabela_iten_pedido, adicionar_itens_pedidos)
 
 app = Flask(__name__)
 
@@ -20,7 +23,7 @@ def sobre():
 
 @app.route('/produtos')
 def produtos():
-    return render_template('produtos.html', produtos=consultar())
+    return render_template('produtos.html', produtos=consultar_produtos())
 
 @app.route('/produtos/novo', methods=['GET', 'POST'])
 def novo_produto():
@@ -40,7 +43,7 @@ def novo_produto():
             estoque_minimo = int(request.form['estoque_minimo'])
         except ValueError:
             return "Necessario valor valido", 400
-        adicionar(nome, preco, estoque, estoque_minimo)
+        adicionar_produtos(nome, preco, estoque, estoque_minimo)
         return redirect(url_for('inicio'))
     return render_template('novo_produto.html')
 
@@ -54,7 +57,7 @@ def editar_produto(id):
         preco = float(request.form['preco'])
         estoque = int(request.form['estoque'])
         estoque_minimo = int(request.form['estoque_minimo'])
-        atualizar(id, nome, preco, estoque, estoque_minimo)
+        atualizar_produtos(id, nome, preco, estoque, estoque_minimo)
         return redirect(url_for('produtos'))
     return render_template('editar_produtos.html', produto=produto)
 
@@ -64,9 +67,9 @@ def excluir_produto(id):
     if produto is None:
         return "produto não encontrado", 404
     if request.method == 'POST':    
-        deletar(id)
+        deletar_produtos(id)
         return redirect(url_for('produtos'))
-    return render_template('produtos.html', produtos=consultar())
+    return render_template('produtos.html', produtos=consultar_produtos)
 
 @app.route('/clientes')
 def clientes():
@@ -107,7 +110,7 @@ def excluir_cliente(id):
     if request.method == 'POST':
         deletar_cliente(id)
         return redirect(url_for('clientes'))
-    return render_template('clientes.html', clinte=consultar())
+    return render_template('clientes.html', clinte=consultar_clientes())
 
 @app.route('/pedidos')
 def pedidos():
@@ -131,11 +134,17 @@ def novo_pedido():
         cliente = buscar_cliente(cliente_id)
         if cliente is None:
             return "clinete não encontrado", 400
+        listar_produtos = consultar_produtos()
+        if listar_produtos is None:
+            return "produto não encontrado", 400
+        else:
+            preco_unitario = listar_produtos['preco']
         pedido_id = adicionar_pedidos(cliente_id)
-        item_id = adicionar_itens_pedidos(pedido_id, produto_id, quantidade)
+        item_id = adicionar_itens_pedidos(pedido_id, produto_id, quantidade, preco_unitario)
         return redirect(url_for('pedidos'))
     listar_cliente = consultar_clientes()
-    return render_template('novo_pedido.html', clientes=listar_cliente)
+   
+    return render_template('novo_pedido.html', clientes=listar_cliente, produtos=listar_produtos)
 
 
 if __name__ == "__main__":

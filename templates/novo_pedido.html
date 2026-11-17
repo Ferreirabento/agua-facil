@@ -12,6 +12,15 @@
             </option>
         {% endfor %}
     </select>
+    <label for="produto_id">Produto</label>
+    <select name="produto_id" id="produto_id" required>
+        <option value="">Selecione um produto</option>
+        {% for produto in prdutos %}
+            <option value="{{ produto['id'] }}">
+                {{ produto['nome'] }}
+            </option>
+        {% endfor %}
+    </select>
     <button type="submit">Cadastrar pedido</button>
     <a href="{{ url_for('pedidos') }}">Voltar</a>
 </form>
