@@ -118,6 +118,8 @@ def pedidos():
 
 @app.route('/pedidos/novo', methods=['GET', 'POST'])
 def novo_pedido():
+    listar_cliente = consultar_clientes()
+    listar_produtos = consultar_produtos()
     if request.method == 'POST':
         try:
             cliente_id = int(request.form['cliente_id'])
@@ -134,17 +136,15 @@ def novo_pedido():
         cliente = buscar_cliente(cliente_id)
         if cliente is None:
             return "clinete não encontrado", 400
-        listar_produtos = consultar_produtos()
         if listar_produtos is None:
-            return "produto não encontrado", 400
-        else:
-            preco_unitario = listar_produtos['preco']
+            return "Produto não encontrado", 400
+        preco_unitario = listar_produtos['preco']
         pedido_id = adicionar_pedidos(cliente_id)
         item_id = adicionar_itens_pedidos(pedido_id, produto_id, quantidade, preco_unitario)
         return redirect(url_for('pedidos'))
-    listar_cliente = consultar_clientes()
-   
     return render_template('novo_pedido.html', clientes=listar_cliente, produtos=listar_produtos)
+
+
 
 
 if __name__ == "__main__":
