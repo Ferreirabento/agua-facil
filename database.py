@@ -111,8 +111,8 @@ def consultar_pedidos():
 def adicionar_pedidos(cliente_id):
     conexao = conectar()
     data_pedido = datetime.now().isoformat(timespec="seconds")
-    conexao.execute("""INSERT INTO pedidos (cliente_id, data_pedido) VALUES (?, ?)""", (cliente_id, data_pedido))
-    pedido_id = conexao.lastrowid
+    cursor = conexao.execute("""INSERT INTO pedidos (cliente_id, data_pedido) VALUES (?, ?)""", (cliente_id, data_pedido))
+    pedido_id = cursor.lastrowid
     conexao.commit()
     conexao.close()
     return pedido_id
@@ -132,8 +132,8 @@ def criar_tabela_iten_pedido():
 
 def adicionar_itens_pedidos(pedido_id, produto_id, quantidade, preco_unitario):
     conexao = conectar()
-    conexao.execute(""" INSERT INTO itens_pedido (pedido_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)""", (pedido_id, produto_id, quantidade, preco_unitario))
-    item_id = conexao.lastrowid
+    cursor = conexao.execute(""" INSERT INTO itens_pedido (pedido_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)""", (pedido_id, produto_id, quantidade, preco_unitario))
+    item_id = cursor.lastrowid
     conexao.commit()
     conexao.close()
     return item_id

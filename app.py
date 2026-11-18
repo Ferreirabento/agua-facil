@@ -138,7 +138,8 @@ def novo_pedido():
             return "clinete não encontrado", 400
         if listar_produtos is None:
             return "Produto não encontrado", 400
-        preco_unitario = listar_produtos['preco']
+        preco_produto = buscar_produto(produto_id)
+        preco_unitario = preco_produto['preco']
         pedido_id = adicionar_pedidos(cliente_id)
         item_id = adicionar_itens_pedidos(pedido_id, produto_id, quantidade, preco_unitario)
         return redirect(url_for('pedidos'))
