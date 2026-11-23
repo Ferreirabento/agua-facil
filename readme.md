@@ -1,3546 +1,720 @@
-**# 💧 Água Fácil — Estudos com Flask, Jinja e SQLite**
+# 💧 Água Fácil
 
+**Sistema de gerenciamento de vendas para pequenos comerciantes de água.**
 
+O Água Fácil é um projeto de desenvolvimento de software que tem como objetivo auxiliar pequenos comerciantes e revendedores de garrafões de água no gerenciamento de produtos, clientes, estoque e pedidos.
 
-Este projeto faz parte dos meus estudos de **\*\*Python para desenvolvimento web\*\***, utilizando o framework **\*\*Flask\*\***, templates **\*\*Jinja\*\***, banco de dados **\*\*SQLite\*\*** e HTML.
+A proposta é oferecer uma ferramenta simples, leve e intuitiva, que ajude a organizar as atividades comerciais do dia a dia, especialmente em negócios que ainda realizam seus controles manualmente.
 
+O projeto está sendo desenvolvido com Python, Flask e SQLite, priorizando uma arquitetura simples, baixo consumo de recursos e uma interface adaptável a dispositivos móveis.
 
+> **Status do projeto:** Em desenvolvimento — primeira versão (MVP).
 
-A ideia inicial é construir, aos poucos, uma aplicação para o projeto **\*\*Água Fácil\*\***, começando por conceitos simples de Flask e evoluindo para um sistema com produtos, clientes, pedidos, estoque e outras funcionalidades.
+---
 
+## 📌 1. O problema que o projeto busca resolver
 
+Pequenos comerciantes frequentemente precisam controlar diversas informações ao mesmo tempo:
 
-\> **\*\*Objetivo principal:\*\*** não apenas construir o sistema, mas entender o que cada parte faz para conseguir recriá-lo futuramente sem depender de IA.
+- Quais produtos estão disponíveis para venda?
+- Quanto custa cada produto?
+- Quantas unidades ainda existem no estoque?
+- Quem são os clientes?
+- Quais pedidos foram realizados?
+- Quais pedidos ainda estão pendentes?
+- Quanto cada pedido representa em vendas?
 
+Quando essas informações são controladas manualmente, podem surgir dificuldades como perda de registros, erros de cálculo, falta de controle do estoque e dificuldade para acompanhar os pedidos.
 
+O Água Fácil busca centralizar essas informações em um único sistema, tornando o gerenciamento mais organizado e acessível.
 
-**---**
+## 🎯 2. Objetivos do projeto
 
+### Objetivo geral
 
+Desenvolver um sistema que permita ao comerciante cadastrar e gerenciar produtos e clientes, registrar pedidos, acompanhar seus respectivos status e controlar a disponibilidade dos produtos em estoque.
 
-**# 📚 Conteúdos estudados**
+### Objetivos específicos
 
+- Organizar o cadastro e a consulta de produtos.
+- Manter os dados dos clientes registrados.
+- Facilitar a criação e consulta de pedidos.
+- Automatizar o cálculo dos valores das vendas.
+- Evitar pedidos com quantidade superior ao estoque disponível.
+- Permitir o acompanhamento do andamento dos pedidos.
+- Preservar o histórico comercial do estabelecimento.
 
+## 👥 3. Público-alvo
 
-Durante este projeto estou estudando:
+O sistema é direcionado a pequenos comerciantes e revendedores de água que precisam de uma ferramenta para organizar suas vendas, mas que podem não possuir familiaridade com sistemas informatizados.
 
+Por esse motivo, a simplicidade de utilização é uma decisão importante do projeto.
 
+A interface deverá priorizar:
+- Navegação intuitiva.
+- Formulários objetivos.
+- Informações organizadas.
+- Boa visualização em smartphones.
+- Poucas etapas para realizar operações comuns.
 
-\* Python
+---
 
-\* Flask
+## ⚙️ 4. Tecnologias utilizadas
 
-\* Rotas
+| Tecnologia | Responsabilidade |
+|---|---|
+| Python | Linguagem principal da aplicação. |
+| Flask | Framework responsável pelas rotas e pela comunicação entre as partes do sistema. |
+| SQLite | Banco de dados utilizado para armazenar as informações. |
+| HTML | Estrutura das páginas. |
+| CSS | Estilização e adaptação da interface. |
+| Jinja2 | Integração entre os dados enviados pelo Flask e as páginas HTML. |
 
-\* HTTP
+### Por que essas tecnologias foram escolhidas?
 
-\* GET e POST
+**Python**
 
-\* HTML
+Foi escolhido por ser uma linguagem versátil, com sintaxe relativamente simples e ampla utilização no desenvolvimento de aplicações e na área de tecnologia.
 
-\* Jinja
+Além disso, permite que o projeto seja desenvolvido sem exigir uma infraestrutura complexa.
 
-\* Templates
+**Flask**
 
-\* Herança de templates
+O Flask foi escolhido por ser um framework leve para desenvolvimento web.
 
-\* \`render_template()\`
+Diferentemente de frameworks mais completos, ele permite selecionar e organizar os componentes necessários conforme o crescimento do projeto.
 
-\* \`url_for()\`
+Essa escolha ajuda a manter a aplicação simples e facilita o aprendizado dos conceitos de desenvolvimento web.
 
-\* Formulários HTML
+**SQLite**
 
-\* SQLite
+O SQLite foi escolhido por armazenar os dados em um arquivo, sem exigir a instalação e administração de um servidor de banco de dados separado.
 
-\* SQL
+Isso reduz a complexidade da configuração e atende às necessidades de armazenamento da primeira versão.
 
-\* CRUD
+**HTML, CSS e Jinja2**
 
-\* \`SELECT\`
+O HTML estrutura as páginas, o CSS controla a apresentação visual e o Jinja2 permite apresentar informações dinâmicas, como produtos, clientes e pedidos consultados no banco de dados.
 
-\* \`INSERT\`
+A separação dessas responsabilidades facilita a manutenção da interface.
 
-\* \`UPDATE\`
+---
 
-\* \`DELETE\`
+## 🧩 5. Organização e funcionamento do sistema
 
-\* Parâmetros \`?\` em SQL
+O Água Fácil está organizado em módulos que representam as principais atividades do comércio.
 
-\* Prevenção de SQL Injection
+### 5.1. Módulo de produtos
 
-\* \`sqlite3.Row\`
+Responsável pelo gerenciamento dos produtos comercializados.
 
-\* Organização de projetos Flask
+Cada produto deverá possuir:
 
+- Identificador único (`id`).
+- Nome.
+- Preço de venda.
+- Quantidade disponível em estoque.
+- Quantidade mínima de estoque.
+- Indicador de atividade (`ativo`).
 
+**Operações previstas:**
+- Cadastrar produtos.
+- Consultar produtos.
+- Editar informações.
+- Identificar produtos que precisam de reposição.
 
-**---**
+**Por que existe o campo `estoque_minimo`?**
 
+A quantidade mínima funciona como uma referência para identificar quando o estoque de determinado produto está baixo.
 
+Por exemplo: se o estoque mínimo de um produto for 5 unidades e a quantidade disponível chegar a 4, o comerciante poderá identificar que precisa providenciar uma reposição.
 
-**# 1. 🐍 Criando o projeto**
+**Por que existe o campo `ativo`?**
 
+O campo permite desativar um produto sem apagar definitivamente seu registro.
 
+Essa decisão é importante porque um produto pode ter participado de pedidos anteriores. Mesmo que deixe de ser comercializado, suas informações precisam continuar disponíveis para preservar o histórico.
 
-Primeiro criei a pasta do projeto:
+### 5.2. Módulo de clientes
 
+Responsável pelo cadastro e gerenciamento dos clientes.
 
+Cada cliente deverá possuir:
 
-\`\`\`bash
+- Identificador único (`id`).
+- Nome.
+- Telefone.
+- Indicador de atividade (`ativo`).
 
-mkdir myproject
+**Operações previstas:**
+- Cadastrar clientes.
+- Consultar clientes.
+- Editar informações.
 
-cd myproject
+**Por que os pedidos utilizam clientes previamente cadastrados?**
 
-\`\`\`
+Essa decisão evita que o mesmo cliente seja registrado de diferentes maneiras em cada venda.
 
+Ao selecionar um cliente existente, o pedido fica vinculado ao cadastro correto, facilitando a consulta e a organização do histórico comercial.
 
+Caso o cliente ainda não esteja cadastrado, o usuário deverá acessar a seção de clientes e realizar o cadastro antes de criar o pedido.
 
-Depois criei um ambiente virtual Python:
+O campo `ativo` também permite preservar os dados de clientes antigos sem disponibilizá-los para novas operações.
 
+### 5.3. Módulo de pedidos
 
+O módulo de pedidos é responsável por registrar as vendas realizadas pelo comerciante.
 
-\`\`\`bash
+Cada pedido deverá estar associado a um cliente previamente cadastrado.
 
-python3 -m venv .venv
+O processo de criação deverá permitir:
 
-\`\`\`
+1. Selecionar um cliente.
+2. Selecionar um ou mais produtos.
+3. Informar a quantidade desejada de cada produto.
+4. Visualizar o preço unitário.
+5. Consultar o subtotal de cada item.
+6. Visualizar o valor total do pedido.
+7. Confirmar o cadastro.
 
+**Por que os pedidos são separados dos produtos?**
 
+Um pedido representa uma venda realizada para determinado cliente. Ele possui informações próprias, como data de cadastro e status.
 
-O ambiente virtual serve para manter as dependências desse projeto separadas das outras aplicações Python do computador.
+Os produtos, por outro lado, representam os itens comercializados.
 
+Separar essas informações permite que um mesmo cliente realize vários pedidos e que um pedido contenha diferentes produtos.
 
+### 5.4. Módulo de itens do pedido
 
-**---**
+O módulo de itens conecta os pedidos aos produtos.
 
+Essa separação é necessária porque um pedido poderá possuir vários produtos e um mesmo produto poderá aparecer em diversos pedidos.
 
+Cada item deverá armazenar:
 
-**# 2. 🔎 Verificando o Shell**
+- Identificador único (`id`).
+- Identificador do pedido (`pedido_id`).
+- Identificador do produto (`produto_id`).
+- Quantidade.
+- Preço unitário praticado na venda.
 
+**Por que existe uma tabela separada para os itens?**
 
+Imagine uma venda contendo:
 
-Usei:
+- 2 garrafões de água de 20 litros.
+- 1 garrafão de água de 10 litros.
+- 3 unidades de outro produto.
 
+Se os produtos fossem armazenados diretamente na tabela de pedidos, seria necessário criar campos adicionais para cada produto, tornando a estrutura limitada e difícil de manter.
 
+A tabela `itens_pedido` resolve esse problema permitindo que cada produto seja registrado como uma linha vinculada ao pedido.
 
-\`\`\`bash
+### 5.5. Consulta e acompanhamento dos pedidos
 
-echo $SHELL
+O sistema deverá disponibilizar uma listagem com as principais informações de cada pedido:
 
-\`\`\`
+- Identificador do pedido.
+- Nome do cliente.
+- Data do pedido.
+- Valor total.
+- Status atual.
 
+O objetivo é permitir que o comerciante acompanhe as vendas sem precisar consultar diretamente o banco de dados.
 
+Os status inicialmente previstos são:
 
-Esse comando mostra qual shell estou utilizando.
+| Status | Significado |
+|---|---|
+| Pendente | Pedido registrado, aguardando andamento. |
+| Em preparação | Pedido em organização. |
+| Saiu para entrega | Pedido encaminhado para entrega. |
+| Entregue | Pedido concluído. |
+| Cancelado | Pedido cancelado. |
 
+A atualização do status permitirá acompanhar o andamento de cada venda.
 
+---
 
-Como estou utilizando o **\*\*Fish\*\***, a ativação do ambiente virtual é diferente do exemplo tradicional do Bash.
+## 🗄️ 6. Modelagem do banco de dados
 
+A primeira versão utiliza quatro entidades principais: `produtos`, `clientes`, `pedidos` e `itens_pedido`.
 
+### 6.1. Tabela `produtos`
 
-Ativei o ambiente com:
+Armazena os produtos comercializados.
 
+| Campo | Finalidade |
+|---|---|
+| `id` | Identificador do produto. |
+| `nome` | Nome do produto. |
+| `preco` | Preço de venda. |
+| `estoque` | Quantidade disponível. |
+| `estoque_minimo` | Quantidade mínima de referência. |
+| `ativo` | Indica se o produto está disponível para utilização. |
 
+### 6.2. Tabela `clientes`
 
-\`\`\`bash
+Armazena os clientes cadastrados.
 
-source .venv/bin/activate.fish
+| Campo | Finalidade |
+|---|---|
+| `id` | Identificador do cliente. |
+| `nome` | Nome do cliente. |
+| `telefone` | Telefone para contato. |
+| `ativo` | Indica se o cadastro está disponível para utilização. |
 
-\`\`\`
+### 6.3. Tabela `pedidos`
 
+Armazena as informações gerais das vendas.
 
+| Campo | Finalidade |
+|---|---|
+| `id` | Identificador do pedido. |
+| `cliente_id` | Referência ao cliente responsável pelo pedido. |
+| `data_pedido` | Data e horário do cadastro. |
+| `status` | Situação atual do pedido. |
+| `ativo` | Indicador de atividade do registro. |
 
-Depois verifiquei qual Python estava sendo utilizado:
+### 6.4. Tabela `itens_pedido`
 
+Armazena os produtos que compõem cada pedido.
 
+| Campo | Finalidade |
+|---|---|
+| `id` | Identificador do item. |
+| `pedido_id` | Referência ao pedido. |
+| `produto_id` | Referência ao produto. |
+| `quantidade` | Quantidade comercializada. |
+| `preco_unitario` | Preço praticado no momento da venda. |
 
-\`\`\`bash
+### 6.5. Relacionamentos
 
-which python
+A modelagem utiliza relacionamentos entre as quatro tabelas:
 
-\`\`\`
+- Um cliente poderá possuir vários pedidos.
+- Um pedido deverá pertencer a um único cliente.
+- Um pedido poderá possuir vários itens.
+- Um produto poderá aparecer em vários itens de pedidos.
+- Cada item deverá pertencer a um pedido e referenciar um produto.
 
+**Representação simplificada:**
 
+```text
+CLIENTES
+   |
+   | 1:N
+   |
+PEDIDOS
+   |
+   | 1:N
+   |
+ITENS_PEDIDO
+   |
+   | N:1
+   |
+PRODUTOS
+```
 
-Isso é importante para confirmar que estou usando o Python dentro do ambiente virtual.
+Essa estrutura permite organizar os dados sem duplicar informações desnecessariamente.
 
+---
 
+## 💰 7. Regras de cálculo das vendas
 
-**---**
+O sistema deverá calcular automaticamente os valores dos pedidos.
 
+### Subtotal de cada item
 
-
-**# 3. 📦 Instalando Flask**
-
-
-
-Com o ambiente virtual ativado:
-
-
-
-\`\`\`bash
-
-pip install flask
-
-\`\`\`
-
-
-
-O Flask é o framework Python que estou utilizando para criar a aplicação web.
-
-
-
-**---**
-
-
-
-**# 4. 🚀 Primeiro Flask**
-
-
-
-Meu primeiro \`app.py\` foi:
-
-
-
-\`\`\`python
-
-from flask import Flask
-
-
-
-app = Flask(\_\_name\_\_)
-
-
-
-
-
-@app.route("/")
-
-def inicio():
-
-&#x20;   return "ola agua facil"
-
-
-
-
-
-if \_\_name\_\_ == "\_\_main\_\_":
-
-&#x20;   app.run(debug=True)
-
-\`\`\`
-
-
-
-Depois de ativar novamente o ambiente virtual:
-
-
-
-\`\`\`bash
-
-source .venv/bin/activate.fish
-
-\`\`\`
-
-
-
-consegui executar:
-
-
-
-\`\`\`bash
-
-python app.py
-
-\`\`\`
-
-
-
-O Flask iniciou um servidor local e mostrou:
-
-
-
-\`\`\`text
-
-http\://127.0.0.1:5000
-
-\`\`\`
-
-
-
-Esse endereço representa o servidor rodando localmente no meu próprio computador.
-
-
-
-**---**
-
-
-
-**# 5. 🛣️ Entendendo as rotas**
-
-
-
-Depois comecei a criar novas páginas.
-
-
-
-\`\`\`python
-
-from flask import Flask
-
-
-
-app = Flask(\_\_name\_\_)
-
-
-
-
-
-@app.route("/")
-
-def inicio():
-
-&#x20;   return "ola agua facil"
-
-
-
-
-
-@app.route("/sobre")
-
-def sobre():
-
-&#x20;   return "sistema miriti"
-
-
-
-
-
-if \_\_name\_\_ == "\_\_main\_\_":
-
-&#x20;   app.run(debug=True)
-
-\`\`\`
-
-
-
-Agora existem duas rotas:
-
-
-
-\`\`\`text
-
-/
-
-\`\`\`
-
-
-
-e:
-
-
-
-\`\`\`text
-
-/sobre
-
-\`\`\`
-
-
-
-Portanto:
-
-
-
-\`\`\`text
-
-http\://127.0.0.1:5000/
-
-\`\`\`
-
-
-
-retorna:
-
-
-
-\`\`\`text
-
-ola agua facil
-
-\`\`\`
-
-
-
-Enquanto:
-
-
-
-\`\`\`text
-
-http\://127.0.0.1:5000/sobre
-
-\`\`\`
-
-
-
-retorna:
-
-
-
-\`\`\`text
-
-sistema miriti
-
-\`\`\`
-
-
-
-**---**
-
-
-
-**# 6. ➕ Criando mais rotas**
-
-
-
-Continuei adicionando páginas:
-
-
-
-\`\`\`python
-
-@app.route("/produtos")
-
-def produtos():
-
-&#x20;   return "Pagina de Produtos"
-
-
-
-
-
-@app.route("/clientes")
-
-def clientes():
-
-&#x20;   return "Pagina de Clientes"
-
-\`\`\`
-
-
-
-A aplicação passou a ter:
-
-
-
-\`\`\`text
-
-/
-
-├── /sobre
-
-├── /produtos
-
-└── /clientes
-
-\`\`\`
-
-
-
-Essa foi minha primeira percepção de que uma aplicação Flask é basicamente composta por **\*\*rotas que executam funções Python\*\***.
-
-
-
-**---**
-
-
-
-**# 7. 🧱 Começando a utilizar HTML**
-
-
-
-Em vez de retornar apenas texto:
-
-
-
-\`\`\`python
-
-return "Pagina de Produtos"
-
-\`\`\`
-
-
-
-comecei a utilizar templates HTML.
-
-
-
-Primeiro importei:
-
-
-
-\`\`\`python
-
-from flask import Flask, render_template
-
-\`\`\`
-
-
-
-\> Atenção: o nome correto é \`render_template\`, no singular.
-
-\> \`render_templates\` não é a função utilizada pelo Flask.
-
-
-
-Criei a pasta:
-
-
-
-\`\`\`text
-
-templates/
-
-\`\`\`
-
-
-
-E dentro dela:
-
-
-
-\`\`\`text
-
-templates/
-
-└── produtos.html
-
-\`\`\`
-
-
-
-Meu HTML inicial:
-
-
-
-\`\`\`html
-
-\<!DOCTYPE html>
-
-\<html lang="pt-br">
-
-
-
-\<head>
-
-&#x20;   \<meta charset="UTF-8">
-
-
-
-&#x20;   \<meta
-
-&#x20;       name="viewport"
-
-&#x20;       content="width=device-width, initial-scale=1.0"
-
-&#x20;   \>
-
-
-
-&#x20;   \<title>Produtos\</title>
-
-\</head>
-
-
-
-\<body>
-
-
-
-&#x20;   \<h1>Produtos\</h1>
-
-
-
-&#x20;   \<p>Garrafão 20L\</p>
-
-&#x20;   \<p>Água 500ml\</p>
-
-
-
-\</body>
-
-
-
-\</html>
-
-\`\`\`
-
-
-
-**---**
-
-
-
-**# 8. 🔄 \`render_template()\`**
-
-
-
-A rota passou a ser:
-
-
-
-\`\`\`python
-
-@app.route("/produtos")
-
-def produtos():
-
-&#x20;   return render_template("produtos.html")
-
-\`\`\`
-
-
-
-O fluxo agora é:
-
-
-
-\`\`\`text
-
-Navegador
-
-&#x20;   ↓
-
-GET /produtos
-
-&#x20;   ↓
-
-Flask
-
-&#x20;   ↓
-
-função produtos()
-
-&#x20;   ↓
-
-render_template()
-
-&#x20;   ↓
-
-templates/produtos.html
-
-&#x20;   ↓
-
-HTML
-
-&#x20;   ↓
-
-Navegador
-
-\`\`\`
-
-
-
-**---**
-
-
-
-**# 9. 📦 Passando dados do Python para o HTML**
-
-
-
-Depois fiz um teste colocando os produtos diretamente no Python:
-
-
-
-\`\`\`python
-
-@app.route("/produtos")
-
-def produtos():
-
-
-
-&#x20;   produtos = [
-
-&#x20;       {
-
-&#x20;           "nome": "Agua fulanoDeTow 20L",
-
-&#x20;           "preco": 10
-
-&#x20;       }
-
-&#x20;   ]
-
-
-
-&#x20;   return render_template(
-
-&#x20;       "produtos.html",
-
-&#x20;       produtos=produtos
-
-&#x20;   )
-
-\`\`\`
-
-
-
-Aqui estou enviando uma variável chamada:
-
-
-
-\`\`\`python
-
-produtos
-
-\`\`\`
-
-
-
-para o template.
-
-
-
-**---**
-
-
-
-**# 10. 🧩 Jinja**
-
-
-
-No HTML posso utilizar Jinja:
-
-
-
-\`\`\`html
-
-{% for produto in produtos %}
-
-
-
-\<div>
-
-
-
-&#x20;   \<h2>{{ produto.nome }}\</h2>
-
-
-
-&#x20;   \<p>
-
-&#x20;       {{ produto.preco }}
-
-&#x20;   \</p>
-
-
-
-\</div>
-
-
-
-{% endfor %}
-
-\`\`\`
-
-
-
-Existem duas estruturas importantes:
-
-
-
-**## \`{{ }}\`**
-
-
-
-Usado para mostrar valores.
-
-
+```text
+Subtotal = Quantidade × Preço unitário
+```
 
 Exemplo:
 
+```text
+Produto: Garrafão de 20 litros
+Quantidade: 3
+Preço unitário: R$ 12,00
 
+Subtotal: R$ 36,00
+```
 
-\`\`\`html
+### Total do pedido
 
-{{ produto.nome }}
-
-\`\`\`
-
-
-
-Significa:
-
-
-
-\> Mostre o valor de \`produto.nome\`.
-
-
-
-**---**
-
-
-
-**## \`{% %}\`**
-
-
-
-Usado para estruturas de controle do Jinja.
-
-
+```text
+Total = Soma dos subtotais dos itens
+```
 
 Exemplo:
 
-
-
-\`\`\`html
-
-{% for produto in produtos %}
-
-\`\`\`
-
-
-
-e:
-
-
-
-\`\`\`html
-
-{% endfor %}
-
-\`\`\`
-
-
-
-Isso permite percorrer uma lista.
-
-
-
-**---**
-
-
-
-**# 11. 📝 Testando Jinja na página Sobre**
-
-
-
-Também fiz um teste passando informações do Python para \`sobre.html\`:
-
-
-
-\`\`\`python
-
-@app.route("/sobre")
-
-def sobre():
-
-
-
-&#x20;   sobre = [
-
-&#x20;       {
-
-&#x20;           "informacao": "O miriti é o nome dado à fibra leve e flexível extraída do pecíolo (talo da folha) da palmeira buritizeiro (Mauritia flexuosa), nativa das áreas alagadiças da Amazônia e do Cerrado. Conhecido popularmente como o 'isopor natural da Amazônia', esse material é biodegradável e sustentável, pois sua obtenção não exige o derrubamento da árvore, apenas a poda criteriosa das folhas mais velhas."
-
-&#x20;       }
-
-&#x20;   ]
-
-
-
-&#x20;   return render_template(
-
-&#x20;       "sobre.html",
-
-&#x20;       sobre=sobre
-
-&#x20;   )
-
-\`\`\`
-
-
-
-Esse exercício me ajudou a entender que o Flask pode pegar dados do Python e entregá-los para o Jinja.
-
-
-
-**---**
-
-
-
-**# 12. 🗄️ SQLite**
-
-
-
-Depois comecei a trabalhar com banco de dados.
-
-
-
-O Python já possui uma biblioteca própria para SQLite:
-
-
-
-\`\`\`python
-
-import sqlite3
-
-\`\`\`
-
-
-
-Não preciso instalar SQLite com \`pip\` para utilizar a biblioteca básica do Python.
-
-
-
-Meu objetivo passou a ser deixar de armazenar os produtos diretamente no Python:
-
-
-
-\`\`\`python
-
-produtos = [
-
-&#x20;   ...
-
-]
-
-\`\`\`
-
-
-
-e passar a armazená-los em um banco de dados.
-
-
-
-**---**
-
-
-
-**# 13. 📁 \`database.py\`**
-
-
-
-Criei um arquivo separado para concentrar as operações do banco:
-
-
-
-\`\`\`text
-
-database.py
-
-\`\`\`
-
-
-
-A ideia é separar:
-
-
-
-\`\`\`text
-
-app.py
-
-&#x20;   ↓
-
-rotas da aplicação
-
-
-
-
-
-database.py
-
-&#x20;   ↓
-
-operações com banco
-
-\`\`\`
-
-
-
-**---**
-
-
-
-**# 14. 🔌 Conectando ao SQLite**
-
-
-
-Meu código:
-
-
-
-\`\`\`python
-
-import sqlite3
-
-
-
-
-
-bancoDeDados = "aguaFacil.sql"
-
-
-
-
-
-def conectar():
-
-
-
-&#x20;   conectando = sqlite3.connect(bancoDeDados)
-
-
-
-&#x20;   conectando.row_factory = sqlite3.Row
-
-
-
-&#x20;   return conectando
-
-\`\`\`
-
-
-
-\> Durante meus testes usei nomes diferentes para o arquivo (\`aguaFacil.db\` / \`aguaFacil.sql\`). O ideal é manter um único nome e extensão para evitar confusão.
-
-
-
-**---**
-
-
-
-**# 15. 🧠 \`sqlite3.Row\`**
-
-
-
-Uma descoberta importante foi:
-
-
-
-\`\`\`python
-
-conectando.row_factory = sqlite3.Row
-
-\`\`\`
-
-
-
-Isso faz com que os resultados das consultas sejam mais fáceis de trabalhar.
-
-
-
-Sem \`row_factory\`, um resultado poderia parecer:
-
-
-
-\`\`\`python
-
-(1, "Garrafão 20L", 10.0, 43)
-
-\`\`\`
-
-
-
-Com:
-
-
-
-\`\`\`python
-
-sqlite3.Row
-
-\`\`\`
-
-
-
-posso acessar os dados pelo nome da coluna:
-
-
-
-\`\`\`python
-
-produto["nome"]
-
-\`\`\`
-
-
-
-Isso combina muito bem com Jinja.
-
-
-
-**---**
-
-
-
-**# 16. 🏗️ Criando a tabela de produtos**
-
-
-
-Criei:
-
-
-
-\`\`\`python
-
-def criar_tabela_produtos():
-
-
-
-&#x20;   conexao = conectar()
-
-
-
-&#x20;   conexao.execute("""
-
-&#x20;       CREATE TABLE IF NOT EXISTS produtos (
-
-&#x20;           id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-&#x20;           nome TEXT NOT NULL,
-
-&#x20;           preco REAL NOT NULL,
-
-&#x20;           estoque INTEGER NOT NULL,
-
-&#x20;           estoque_minimo INTEGER NOT NULL,
-
-&#x20;           ativo INTEGER NOT NULL DEFAULT 1
-
-&#x20;       )
-
-&#x20;   """)
-
-
-
-&#x20;   conexao.commit()
-
-&#x20;   conexao.close()
-
-\`\`\`
-
-
-
-A tabela possui:
-
-
-
-\`\`\`text
-
-id
-
-nome
-
-preco
-
-estoque
-
-estoque_minimo
-
-ativo
-
-\`\`\`
-
-
-
-**---**
-
-
-
-**# 17. 🔑 Chave primária**
-
-
-
-Usei:
-
-
-
-\`\`\`sql
-
-id INTEGER PRIMARY KEY AUTOINCREMENT
-
-\`\`\`
-
-
-
-O \`id\` identifica cada produto.
-
-
-
-Por exemplo:
-
-
-
-\`\`\`text
-
-1 → Garrafão 20L
-
-2 → Água 500ml
-
-3 → Água 1,5L
-
-\`\`\`
-
-
-
-O \`AUTOINCREMENT\` permite que o SQLite gere os IDs automaticamente.
-
-
-
-**---**
-
-
-
-**# 18. ⚠️ Correção importante no código original**
-
-
-
-Minha primeira versão tinha:
-
-
-
-\`\`\`sql
-
-id nome TEXT PRIMARY KEY
-
-\`\`\`
-
-
-
-Isso estava incorreto.
-
-
-
-O correto é separar as colunas:
-
-
-
-\`\`\`sql
-
-id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-nome TEXT NOT NULL,
-
-\`\`\`
-
-
-
-**---**
-
-
-
-**# 19. 💾 \`commit()\` e \`close()\`**
-
-
-
-Depois de executar uma alteração:
-
-
-
-\`\`\`python
-
-conexao.commit()
-
-\`\`\`
-
-
-
-confirma a alteração no banco.
-
-
-
-Depois:
-
-
-
-\`\`\`python
-
-conexao.close()
-
-\`\`\`
-
-
-
-fecha a conexão.
-
-
-
-Fluxo:
-
-
-
-\`\`\`text
-
-conectar()
-
-&#x20;   ↓
-
-executar SQL
-
-&#x20;   ↓
-
-commit()
-
-&#x20;   ↓
-
-close()
-
-\`\`\`
-
-
-
-**---**
-
-
-
-**# 20. ➕ Adicionando produtos**
-
-
-
-Criei uma função para inserir produtos:
-
-
-
-\`\`\`python
-
-def adicionar(nome, preco, estoque, estoque_minimo):
-
-
-
-&#x20;   conexao = conectar()
-
-
-
-&#x20;   conexao.execute("""
-
-&#x20;       INSERT INTO produtos
-
-&#x20;       (nome, preco, estoque, estoque_minimo)
-
-&#x20;       VALUES (?, ?, ?, ?)
-
-&#x20;   """, (
-
-&#x20;       nome,
-
-&#x20;       preco,
-
-&#x20;       estoque,
-
-&#x20;       estoque_minimo
-
-&#x20;   ))
-
-
-
-&#x20;   conexao.commit()
-
-&#x20;   conexao.close()
-
-\`\`\`
-
-
-
-Essa função utiliza:
-
-
-
-\`\`\`sql
-
-INSERT INTO
-
-\`\`\`
-
-
-
-para inserir um novo registro.
-
-
-
-**---**
-
-
-
-**# 21. ❓ Por que utilizar \`?\`**
-
-
-
-Um conceito que achei muito importante foi o uso de:
-
-
-
-\`\`\`sql
-
-VALUES (?, ?, ?, ?)
-
-\`\`\`
-
-
-
-em vez de montar SQL com strings, como:
-
-
-
-\`\`\`python
-
-f"INSERT INTO produtos VALUES ('{nome}', ...)"
-
-\`\`\`
-
-
-
-Os \`?\` são parâmetros da consulta.
-
-
-
-Isso ajuda a evitar **\*\*SQL Injection\*\*** e é a forma correta de passar valores para esse tipo de consulta.
-
-
-
-Portanto:
-
-
-
-\`\`\`python
-
-conexao.execute(
-
-&#x20;   """
-
-&#x20;   INSERT INTO produtos
-
-&#x20;   (nome, preco, estoque, estoque_minimo)
-
-&#x20;   VALUES (?, ?, ?, ?)
-
-&#x20;   """,
-
-&#x20;   (nome, preco, estoque, estoque_minimo)
-
-)
-
-\`\`\`
-
-
-
-é preferível a concatenar valores diretamente no SQL.
-
-
-
-**---**
-
-
-
-**# 22. 🔎 Consultando produtos**
-
-
-
-Criei uma segunda função:
-
-
-
-\`\`\`python
-
-def consultar():
-
-
-
-&#x20;   conexao = conectar()
-
-
-
-&#x20;   produtos = conexao.execute("""
-
-&#x20;       SELECT \*
-
-&#x20;       FROM produtos
-
-&#x20;       WHERE ativo = 1
-
-&#x20;       ORDER BY nome
-
-&#x20;   """).fetchall()
-
-
-
-&#x20;   conexao.close()
-
-
-
-&#x20;   return produtos
-
-\`\`\`
-
-
-
-Essa função utiliza:
-
-
-
-\`\`\`sql
-
-SELECT
-
-\`\`\`
-
-
-
-para consultar os produtos.
-
-
-
-**---**
-
-
-
-**# 23. Entendendo o SELECT**
-
-
-
-\`\`\`sql
-
-SELECT \*
-
-FROM produtos
-
-WHERE ativo = 1
-
-ORDER BY nome
-
-\`\`\`
-
-
-
-Significa:
-
-
-
-\`\`\`text
-
-SELECT \*
-
-&#x20;   ↓
-
-selecione os dados
-
-
-
-FROM produtos
-
-&#x20;   ↓
-
-da tabela produtos
-
-
-
-WHERE ativo = 1
-
-&#x20;   ↓
-
-somente produtos ativos
-
-
-
-ORDER BY nome
-
-&#x20;   ↓
-
-ordene pelo nome
-
-\`\`\`
-
-
-
-O:
-
-
-
-\`\`\`python
-
-.fetchall()
-
-\`\`\`
-
-
-
-retorna todos os resultados encontrados.
-
-
-
-**---**
-
-
-
-**# 24. 🔗 Ligando Flask e banco**
-
-
-
-No \`app.py\` passei a importar as funções do banco:
-
-
-
-\`\`\`python
-
-from flask import Flask, render_template
-
-
-
-from database import (
-
-&#x20;   criar_tabela_produtos,
-
-&#x20;   consultar
-
-)
-
-\`\`\`
-
-
-
-Depois:
-
-
-
-\`\`\`python
-
-app = Flask(\_\_name\_\_)
-
-
-
-criar_tabela_produtos()
-
-\`\`\`
-
-
-
-Isso garante que a tabela seja criada quando a aplicação for iniciada.
-
-
-
-**---**
-
-
-
-**# 25. 📦 Produtos agora vêm do banco**
-
-
-
-A rota:
-
-
-
-\`\`\`python
-
-@app.route("/produtos")
-
-def produtos():
-
-&#x20;   return render_template(
-
-&#x20;       "produtos.html",
-
-&#x20;       produtos=consultar()
-
-&#x20;   )
-
-\`\`\`
-
-
-
-Agora funciona assim:
-
-
-
-\`\`\`text
-
-Navegador
-
-&#x20;   ↓
-
-/produtos
-
-&#x20;   ↓
-
-Flask
-
-&#x20;   ↓
-
-consultar()
-
-&#x20;   ↓
-
-SQLite
-
-&#x20;   ↓
-
-SELECT
-
-&#x20;   ↓
-
-produtos
-
-&#x20;   ↓
-
-Jinja
-
-&#x20;   ↓
-
-produtos.html
-
-\`\`\`
-
-
-
-Esse foi um dos primeiros momentos em que o projeto deixou de ser apenas uma página estática.
-
-
-
-**---**
-
-
-
-**# 26. 🧱 \`base.html\` e herança de templates**
-
-
-
-Depois comecei a estudar uma funcionalidade muito interessante do Jinja:
-
-
-
-\`\`\`text
-
-{% extends %}
-
-{% block %}
-
-\`\`\`
-
-
-
-Criei:
-
-
-
-\`\`\`text
-
-templates/
-
-├── base.html
-
-├── produtos.html
-
-└── novo_produto.html
-
-\`\`\`
-
-
-
-O \`base.html\` funciona como um **\*\*molde\*\*** para as outras páginas.
-
-
-
-**---**
-
-
-
-**# 27. \`base.html\`**
-
-
-
-Minha estrutura:
-
-
-
-\`\`\`html
-
-\<!DOCTYPE html>
-
-
-
-\<html lang="pt-br">
-
-
-
-\<head>
-
-
-
-&#x20;   \<meta charset="UTF-8">
-
-
-
-&#x20;   \<meta
-
-&#x20;       name="viewport"
-
-&#x20;       content="width=device-width, initial-scale=1.0"
-
-&#x20;   \>
-
-
-
-&#x20;   \<title>
-
-&#x20;       {% block title %}
-
-&#x20;           Água Fácil
-
-&#x20;       {% endblock %}
-
-&#x20;   \</title>
-
-
-
-&#x20;   \<link
-
-&#x20;       rel="stylesheet"
-
-&#x20;       href="{{ url_for('static', filename='css/style.css') }}"
-
-&#x20;   \>
-
-
-
-\</head>
-
-
-
-\<body>
-
-
-
-&#x20;   \<header>
-
-&#x20;       \<h1>Água Fácil\</h1>
-
-&#x20;   \</header>
-
-
-
-&#x20;   \<main>
-
-
-
-&#x20;       {% block content %}
-
-&#x20;       {% endblock %}
-
-
-
-&#x20;   \</main>
-
-
-
-\</body>
-
-
-
-\</html>
-
-\`\`\`
-
-
-
-**---**
-
-
-
-**# 28. 🧠 O que são os Blocks?**
-
-
-
-Os:
-
-
-
-\`\`\`jinja
-
-{% block title %}
-
-{% endblock %}
-
-\`\`\`
-
-
-
-e:
-
-
-
-\`\`\`jinja
-
-{% block content %}
-
-{% endblock %}
-
-\`\`\`
-
-
-
-definem espaços que podem ser preenchidos pelas páginas que utilizarem esse template.
-
-
-
-Por isso considero o \`base.html\` como um **\*\*molde\*\***.
-
-
-
-A ideia é:
-
-
-
-\`\`\`text
-
-base.html
-
-│
-
-├── estrutura HTML
-
-├── cabeçalho
-
-├── CSS
-
-├── \<main>
-
-│
-
-└── espaço para conteúdo
-
-\`\`\`
-
-
-
-E outras páginas aproveitam essa estrutura.
-
-
-
-**---**
-
-
-
-**# 29. ♻️ \`extends\`**
-
-
-
-No \`produtos.html\`:
-
-
-
-\`\`\`jinja
-
-{% extends "base.html" %}
-
-\`\`\`
-
-
-
-significa:
-
-
-
-\> Esta página utiliza \`base.html\` como modelo.
-
-
-
-Depois posso preencher o bloco:
-
-
-
-\`\`\`jinja
-
-{% block title %}
-
-Produtos
-
-{% endblock %}
-
-\`\`\`
-
-
-
-e:
-
-
-
-\`\`\`jinja
-
-{% block content %}
-
-
-
-\<h2>Produtos\</h2>
-
-
-
-{% endblock %}
-
-\`\`\`
-
-
-
-**---**
-
-
-
-**# 30. Produtos utilizando o \`base.html\`**
-
-
-
-O template ficou:
-
-
-
-\`\`\`html
-
-{% extends "base.html" %}
-
-
-
-{% block title %}
-
-Produtos
-
-{% endblock %}
-
-
-
-{% block content %}
-
-
-
-\<h2>Produtos\</h2>
-
-
-
-\<a href="/produtos/novo">
-
-&#x20;   Novo Produto
-
-\</a>
-
-
-
-{% for produto in produtos %}
-
-
-
-\<article>
-
-
-
-&#x20;   \<h3>
-
-&#x20;       {{ produto["nome"] }}
-
-&#x20;   \</h3>
-
-
-
-&#x20;   \<p>
-
-&#x20;       R$ {{ "%.2f"|format(produto["preco"]) }}
-
-&#x20;   \</p>
-
-
-
-&#x20;   \<p>
-
-&#x20;       Estoque:
-
-&#x20;       {{ produto["estoque"] }}
-
-&#x20;   \</p>
-
-
-
-\</article>
-
-
-
-{% endfor %}
-
-
-
-{% endblock %}
-
-\`\`\`
-
-
-
-**---**
-
-
-
-**# 31. 🔗 Link para cadastro**
-
-
-
-Usei:
-
-
-
-\`\`\`html
-
-\<a href="/produtos/novo">
-
-&#x20;   Novo Produto
-
-\</a>
-
-\`\`\`
-
-
-
-Esse link leva para:
-
-
-
-\`\`\`text
-
-/produtos/novo
-
-\`\`\`
-
-
-
-A intenção é que essa rota apresente o formulário de cadastro.
-
-
-
-**---**
-
-
-
-**# 32. 📋 Formulário de novo produto**
-
-
-
-Criei:
-
-
-
-\`\`\`text
-
-templates/novo_produto.html
-
-\`\`\`
-
-
-
-O formulário contém:
-
-
-
-\`\`\`html
-
-\<form method="POST">
-
-
-
-&#x20;   \<label for="nome">
-
-&#x20;       Nome
-
-&#x20;   \</label>
-
-
-
-&#x20;   \<input
-
-&#x20;       type="text"
-
-&#x20;       id="nome"
-
-&#x20;       name="nome"
-
-&#x20;       required
-
-&#x20;   \>
-
-
-
-&#x20;   \<label for="preco">
-
-&#x20;       Preço
-
-&#x20;   \</label>
-
-
-
-&#x20;   \<input
-
-&#x20;       type="number"
-
-&#x20;       id="preco"
-
-&#x20;       name="preco"
-
-&#x20;       min="0"
-
-&#x20;       required
-
-&#x20;   \>
-
-
-
-&#x20;   \<label for="estoque">
-
-&#x20;       Estoque
-
-&#x20;   \</label>
-
-
-
-&#x20;   \<input
-
-&#x20;       type="number"
-
-&#x20;       id="estoque"
-
-&#x20;       name="estoque"
-
-&#x20;       required
-
-&#x20;   \>
-
-
-
-&#x20;   \<label for="estoque_minimo">
-
-&#x20;       Estoque mínimo
-
-&#x20;   \</label>
-
-
-
-&#x20;   \<input
-
-&#x20;       type="number"
-
-&#x20;       id="estoque_minimo"
-
-&#x20;       name="estoque_minimo"
-
-&#x20;       required
-
-&#x20;   \>
-
-
-
-&#x20;   \<button type="submit">
-
-&#x20;       Cadastrar
-
-&#x20;   \</button>
-
-
-
-\</form>
-
-\`\`\`
-
-
-
-**---**
-
-
-
-**# 33. ⚠️ Correção importante no \`novo_produto.html\`**
-
-
-
-Durante meus estudos, escrevi algo semelhante a:
-
-
-
-\`\`\`html
-
-{% extends "base.html" %}
-
-
-
-{% block content %}
-
-novo produto
-
-{% endblock %}
-
-
-
-{% block content %}
-
-...
-
-{% endblock %}
-
-\`\`\`
-
-
-
-Isso possui dois \`blocks\` com o mesmo nome.
-
-
-
-O correto é utilizar **\*\*um único \`block content\`\*\***:
-
-
-
-\`\`\`html
-
-{% extends "base.html" %}
-
-
-
-{% block title %}
-
-Cadastro de Novo Produto
-
-{% endblock %}
-
-
-
-{% block content %}
-
-
-
-\<h2>Novo Produto\</h2>
-
-
-
-\<form method="POST">
-
-
-
-&#x20;   ...
-
-
-
-\</form>
-
-
-
-{% endblock %}
-
-\`\`\`
-
-
-
-Além disso, quando utilizamos \`extends\`, ele deve ficar no início do template, e não dentro de \`\<body>\`.
-
-
-
-**---**
-
-
-
-**# 34. 🧭 Rota do novo produto
-
-No `app.py`, a rota do novo produto passou a aceitar **GET e POST**:
-
-```python
-@app.route('/produtos/novo', methods=['GET', 'POST'])
-def novo_produto():
-    if request.method == 'POST':
-        nome = request.form['nome'].strip()
-
-        if not nome:
-            return "Nome é obrigatório", 400
-
-        try:
-            preco = float(request.form['preco'])
-        except ValueError:
-            return "Necessário valor válido", 400
-
-        try:
-            estoque = int(request.form['estoque'])
-        except ValueError:
-            return "Necessário valor válido", 400
-
-        try:
-            estoque_minimo = int(request.form['estoque_minimo'])
-        except ValueError:
-            return "Necessário valor válido", 400
-
-        adicionar(nome, preco, estoque, estoque_minimo)
-
-        return redirect(url_for('inicio'))
-
-    return render_template('novo_produto.html')
-```
-
-Agora a rota possui dois comportamentos:
-
 ```text
-GET
- ↓
-mostrar formulário
+Produto A: R$ 36,00
+Produto B: R$ 15,00
+Produto C: R$ 20,00
+
+Total do pedido: R$ 71,00
 ```
 
-e:
+### Por que armazenar o preço praticado no momento da venda?
 
-```text
-POST
- ↓
-receber dados
- ↓
-validar
- ↓
-adicionar()
- ↓
-INSERT
- ↓
-SQLite
- ↓
-redirect()
-```
+O preço de um produto pode mudar com o passar do tempo.
+
+Se o sistema consultasse sempre o preço atual do cadastro para calcular pedidos antigos, uma alteração no preço poderia modificar indevidamente o valor de vendas anteriores.
+
+Por isso, a tabela `itens_pedido` possui o campo `preco_unitario`.
+
+Ele registra o valor praticado no momento da venda, preservando a informação histórica.
 
 ---
 
-# 35. 📩 Entendendo `request.form`
+## 📦 8. Controle de estoque
 
-No formulário HTML existem campos como:
+O estoque deverá ser considerado durante a criação dos pedidos.
 
-```html
-<input type="text" name="nome">
-<input type="number" name="preco">
-<input type="number" name="estoque">
-<input type="number" name="estoque_minimo">
-```
+Antes de confirmar uma venda, o sistema deverá verificar:
 
-O atributo `name` é importante porque é através dele que o Flask identifica cada valor recebido.
+1. Se o produto existe e está ativo.
+2. Se a quantidade informada é um número inteiro.
+3. Se a quantidade é maior que zero.
+4. Se existe estoque suficiente para atender ao pedido.
 
-Por exemplo:
+Não deverá ser permitido registrar uma quantidade superior à disponibilidade.
 
-```python
-nome = request.form['nome']
-```
+Após a confirmação bem-sucedida do pedido, o sistema deverá atualizar o estoque.
 
-significa:
+Quando um pedido for cancelado, o estoque deverá ser tratado de maneira consistente, devolvendo à disponibilidade a quantidade anteriormente descontada.
 
-> Pegue do formulário o valor cujo nome é `nome`.
+**Por que o controle de estoque precisa ser integrado aos pedidos?**
 
-O fluxo é:
+O estoque não pode ser tratado como uma informação independente das vendas.
 
-```text
-HTML
- ↓
-name="nome"
- ↓
-POST
- ↓
-request.form['nome']
- ↓
-Python
-```
+Quando um pedido é registrado, a quantidade disponível muda. Caso essa atualização não aconteça, o sistema poderá apresentar uma quantidade incorreta e permitir vendas de produtos indisponíveis.
+
+Por isso, o registro do pedido e a atualização do estoque precisam funcionar de maneira consistente.
 
 ---
 
-# 36. 🔢 Conversão dos valores do formulário
+## 🔒 9. Preservação do histórico e integridade dos dados
 
-Uma coisa importante aprendida foi que os valores recebidos pelo formulário precisam ser tratados antes de serem utilizados.
+O projeto prevê mecanismos para evitar a perda de informações importantes.
 
-Por exemplo:
+### Desativação em vez de exclusão definitiva
 
-```python
-preco = float(request.form['preco'])
-```
+Produtos e clientes poderão ser desativados quando não forem mais utilizados.
 
-transforma o valor recebido em `float`.
+Essa decisão evita que registros antigos percam suas referências.
 
-Para números inteiros:
+Por exemplo: um cliente pode deixar de comprar no estabelecimento, mas seus pedidos anteriores ainda precisam continuar associados ao seu cadastro.
 
-```python
-estoque = int(request.form['estoque'])
-```
+### Integridade referencial
 
-e:
+As tabelas utilizam chaves estrangeiras para garantir que os relacionamentos entre clientes, pedidos, produtos e itens sejam válidos.
 
-```python
-estoque_minimo = int(request.form['estoque_minimo'])
-```
+Isso evita que um pedido faça referência a um cliente inexistente ou que um item seja associado a um produto que não existe.
 
-A ideia é:
+### Operações consistentes
 
-```text
-Formulário
- ↓
-request.form
- ↓
-string recebida
- ↓
-float() ou int()
- ↓
-valor utilizado pelo Python
-```
+O registro de um pedido e de seus itens deverá ocorrer de maneira consistente.
 
-Também comecei a utilizar `try` / `except` para evitar que valores inválidos provoquem um erro inesperado:
+Caso uma etapa do processo falhe, a operação deverá ser revertida para evitar que o banco de dados fique com um pedido incompleto.
 
-```python
-try:
-    preco = float(request.form['preco'])
-except ValueError:
-    return "Necessário valor válido", 400
-```
+Para isso, o projeto prevê o uso de transações no banco de dados.
 
 ---
 
-# 37. 🔄 POST → banco → redirect
+## 🔄 10. Fluxo principal de utilização
 
-Depois da validação, o produto é enviado para:
-
-```python
-adicionar(nome, preco, estoque, estoque_minimo)
-```
-
-A função `adicionar()` executa:
-
-```sql
-INSERT INTO produtos
-(nome, preco, estoque, estoque_minimo)
-VALUES (?, ?, ?, ?)
-```
-
-Depois:
-
-```python
-conexao.commit()
-```
-
-confirma a alteração.
-
-Por fim, o Flask utiliza:
-
-```python
-redirect(url_for('inicio'))
-```
-
-para redirecionar o usuário.
-
-O fluxo aprendido ficou:
+O funcionamento esperado da primeira versão segue esta sequência:
 
 ```text
-FORMULÁRIO
-    ↓
-POST
-    ↓
-request.form
-    ↓
-validação
-    ↓
-adicionar()
-    ↓
-INSERT
-    ↓
-commit()
-    ↓
-redirect()
+        ACESSO AO SISTEMA
+                |
+                v
+        CADASTRAR PRODUTOS
+                |
+                v
+         CADASTRAR CLIENTES
+                |
+                v
+         ACESSAR PEDIDOS
+                |
+                v
+       CONSULTAR PEDIDOS EXISTENTES
+                |
+                v
+          NOVO PEDIDO
+                |
+                v
+        SELECIONAR CLIENTE
+                |
+                v
+       SELECIONAR PRODUTOS
+                |
+                v
+        INFORMAR QUANTIDADES
+                |
+                v
+        VALIDAR O ESTOQUE
+                |
+                v
+       CALCULAR OS SUBTOTAIS
+                |
+                v
+       CALCULAR O VALOR TOTAL
+                |
+                v
+         CONFIRMAR PEDIDO
+                |
+                v
+       REGISTRAR PEDIDO E ITENS
+                |
+                v
+        ATUALIZAR O ESTOQUE
+                |
+                v
+       ACOMPANHAR O STATUS
 ```
 
-Esse padrão será utilizado novamente na edição de produtos.
+Caso o cliente não esteja cadastrado, o usuário deverá realizar seu cadastro na seção de clientes antes de continuar.
 
 ---
 
-# 38. ✏️ Editando produtos
+## 🏗️ 11. Organização do código
 
-Depois do cadastro, o próximo passo do CRUD foi começar a trabalhar com a **edição de produtos**.
+O projeto busca separar as responsabilidades da aplicação para facilitar a manutenção e a evolução do sistema.
 
-A rota utilizada é:
+A organização conceitual é:
 
-```python
-@app.route('/produtos/<int:id>/editar', methods=['GET', 'POST'])
-def editar_produto(id):
-    ...
-```
+| Componente | Responsabilidade |
+|---|---|
+| `app.py` | Gerenciar as rotas, receber dados dos formulários e controlar o fluxo da aplicação. |
+| `database.py` | Concentrar as operações de criação, consulta, atualização e acesso ao banco de dados. |
+| `templates/` | Armazenar os arquivos HTML utilizados na apresentação das páginas. |
+| `static/` | Armazenar recursos estáticos, como folhas de estilo CSS. |
+| `aguaFacil.sql` | Arquivo utilizado como banco de dados SQLite. |
 
-O trecho:
+**Por que separar `app.py` e `database.py`?**
 
-```text
-<int:id>
-```
+O arquivo `app.py` deve cuidar da comunicação entre o usuário e a aplicação, enquanto `database.py` deve concentrar as operações relacionadas ao armazenamento dos dados.
 
-faz com que o ID recebido pela URL seja tratado como um inteiro.
+Essa separação evita que as consultas SQL fiquem espalhadas pelas rotas e torna o código mais organizado.
 
-Por exemplo:
-
-```text
-/produtos/7/editar
-```
-
-faz a função receber:
-
-```python
-id = 7
-```
+Também facilita futuras alterações: por exemplo, uma mudança na forma de consultar produtos pode ser concentrada nas funções de acesso ao banco de dados.
 
 ---
 
-# 39. 🔎 Buscando um produto pelo ID
+## 📋 12. Requisitos não funcionais
 
-Para editar um produto, primeiro precisamos encontrá-lo no banco.
+Além das funcionalidades, o Água Fácil possui requisitos relacionados à qualidade do sistema.
 
-Foi criada a função:
-
-```python
-def buscar_produto(id):
-    conexao = conectar()
-
-    produto = conexao.execute(
-        """SELECT * FROM produtos WHERE id = ?""",
-        (id,)
-    ).fetchone()
-
-    conexao.close()
-
-    return produto
-```
-
-O fluxo é:
-
-```text
-id recebido pela URL
-        ↓
-buscar_produto(id)
-        ↓
-SELECT
-        ↓
-WHERE id = ?
-        ↓
-fetchone()
-        ↓
-produto
-```
-
-O `fetchone()` retorna apenas um registro.
-
-Como o projeto utiliza:
-
-```python
-conectando.row_factory = sqlite3.Row
-```
-
-podemos acessar os valores pelo nome da coluna:
-
-```python
-produto["nome"]
-produto["preco"]
-produto["estoque"]
-produto["estoque_minimo"]
-```
+| Requisito | Aplicação no projeto |
+|---|---|
+| Usabilidade | Interface simples e intuitiva. |
+| Responsividade | Adaptação a diferentes tamanhos de tela, priorizando smartphones. |
+| Desempenho | Operações sem atrasos perceptíveis no uso normal. |
+| Persistência | Dados armazenados em SQLite. |
+| Integridade | Uso de chaves estrangeiras e validações. |
+| Segurança | Consultas parametrizadas e validação dos formulários. |
+| Confiabilidade | Operações consistentes, com uso de transações. |
+| Manutenibilidade | Separação das responsabilidades do código. |
+| Compatibilidade | Funcionamento em navegadores modernos. |
+| Eficiência | Uso de tecnologias leves e baixo consumo de recursos. |
 
 ---
 
-# 40. ⚠️ `SELECT` não precisa de `commit()`
+## 🚧 13. Estado atual do desenvolvimento
 
-Durante a implementação de `buscar_produto()`, foi identificado que não é necessário utilizar:
+O projeto está sendo desenvolvido de forma incremental. As funcionalidades são implementadas e testadas por etapas.
 
-```python
-conexao.commit()
-```
+| Área | Situação |
+|---|---|
+| Estrutura inicial com Flask | Em desenvolvimento |
+| Cadastro e consulta de produtos | Implementação inicial |
+| Edição de produtos | Implementação inicial |
+| Cadastro e consulta de clientes | Implementação inicial |
+| Edição de clientes | Implementação inicial |
+| Estrutura das tabelas de pedidos | Implementação inicial |
+| Cadastro de pedidos e itens | Implementação inicial |
+| Consulta completa dos pedidos | Pendente de ajustes |
+| Validação de estoque | Pendente |
+| Cálculo automático dos valores na interface | Pendente |
+| Atualização automática do estoque | Pendente |
+| Atualização de status | Pendente |
+| Cancelamento e restauração do estoque | Pendente |
+| Testes das operações principais | Pendente |
+| Revisão da interface para smartphones | Em desenvolvimento |
 
-depois de um `SELECT`.
-
-A diferença é:
-
-```text
-SELECT
- ↓
-consulta dados
- ↓
-fetchone() / fetchall()
- ↓
-close()
-```
-
-Enquanto operações que alteram o banco precisam confirmar a alteração:
-
-```text
-INSERT / UPDATE / DELETE
- ↓
-commit()
- ↓
-close()
-```
-
-Uma regra importante aprendida:
-
-> **SELECT lê dados. INSERT, UPDATE e DELETE modificam dados.**
+A tabela representa o andamento conhecido durante a elaboração desta documentação. Ela deverá ser atualizada conforme as funcionalidades forem implementadas e testadas.
 
 ---
 
-# 41. 📝 Atualizando um produto
+## 🗺️ 14. Próximas etapas
 
-A função `atualizar()` já está preparada para receber o ID do produto:
+O desenvolvimento da primeira versão seguirá uma ordem de prioridades:
 
-```python
-def atualizar(id, nome, preco, estoque, estoque_minimo):
-    conexao = conectar()
+**Etapa 1 — Cadastros**
+- Finalizar o cadastro de produtos.
+- Finalizar o cadastro de clientes.
+- Revisar as operações de edição e desativação.
 
-    conexao.execute(
-        """
-        UPDATE produtos
-        SET nome = ?, preco = ?, estoque = ?, estoque_minimo = ?
-        WHERE id = ?
-        """,
-        (nome, preco, estoque, estoque_minimo, id)
-    )
+**Etapa 2 — Pedidos**
+- Finalizar a seleção de clientes.
+- Permitir a seleção de um ou mais produtos.
+- Implementar a validação de quantidade.
+- Implementar a validação de estoque.
+- Calcular subtotais e total.
+- Registrar pedidos e itens de maneira consistente.
 
-    conexao.commit()
-    conexao.close()
-```
+**Etapa 3 — Consulta e acompanhamento**
+- Exibir os dados completos dos pedidos.
+- Apresentar o valor total.
+- Permitir a atualização do status.
 
-O ponto mais importante é:
+**Etapa 4 — Estoque e preservação do histórico**
+- Atualizar o estoque após a confirmação.
+- Tratar o estoque em pedidos cancelados.
+- Preservar os registros históricos.
 
-```sql
-WHERE id = ?
-```
-
-Isso faz com que apenas o produto escolhido seja alterado.
-
-Sem o `WHERE`, um `UPDATE` poderia alterar todos os registros da tabela.
-
-O fluxo é:
-
-```text
-editar_produto(id)
-       ↓
-atualizar(id, ...)
-       ↓
-UPDATE
-       ↓
-WHERE id = ?
-       ↓
-commit()
-       ↓
-SQLite
-```
+**Etapa 5 — Testes e ajustes**
+- Testar formulários com dados válidos e inválidos.
+- Verificar a integridade dos relacionamentos.
+- Testar a aplicação em smartphones.
+- Revisar a experiência de utilização.
 
 ---
 
-# 42. 🧭 Fluxo GET e POST na edição
+## 🚫 15. Fora do escopo da primeira versão
 
-A rota de edição utiliza novamente os dois métodos HTTP.
+Para manter o desenvolvimento controlado e priorizar as funcionalidades essenciais, alguns recursos não fazem parte dos objetivos obrigatórios do primeiro lançamento:
 
-### GET
+- Integração com WhatsApp.
+- Emissão de notas fiscais.
+- Integração com sistemas de pagamento.
+- Gestão financeira completa.
+- Relatórios avançados e dashboards.
+- Controle de múltiplos estabelecimentos.
+- Aplicativo nativo para Android ou iOS.
 
-Quando o usuário acessa:
-
-```text
-/produtos/7/editar
-```
-
-o objetivo é buscar o produto e mostrar o formulário:
-
-```text
-GET
- ↓
-editar_produto(7)
- ↓
-buscar_produto(7)
- ↓
-SELECT
- ↓
-produto
- ↓
-editar_produto.html
-```
-
-### POST
-
-Depois que o usuário altera os dados e envia o formulário:
-
-```text
-POST
- ↓
-request.form
- ↓
-validação
- ↓
-atualizar(7, ...)
- ↓
-UPDATE
- ↓
-commit()
- ↓
-redirect()
- ↓
-/produtos
-```
-
-Esse fluxo é uma aplicação prática do conceito de GET e POST estudado anteriormente.
+Essas funcionalidades poderão ser consideradas em versões futuras, conforme as necessidades do negócio.
 
 ---
 
-# 43. 🔗 Link para edição
+## ▶️ 16. Como executar o projeto
 
-Na lista de produtos, podemos criar um link para a rota de edição:
+### Pré-requisitos
 
-```html
-<a href="{{ url_for('editar_produto', id=produto['id']) }}">
-    Editar
-</a>
-```
+- Python instalado.
+- Git instalado.
+- Ambiente virtual Python.
+- Navegador moderno.
 
-Se o produto possuir:
-
-```text
-id = 7
-```
-
-o Flask poderá gerar:
-
-```text
-/produtos/7/editar
-```
-
-Assim, o ID do produto é transportado pela URL até a função Python.
-
----
-
-# 44. 🧩 `novo_produto.html` x `editar_produto.html`
-
-Neste momento, a ideia é manter os templates separados para facilitar o aprendizado:
-
-```text
-novo_produto.html
-    ↓
-CREATE
-    ↓
-INSERT
-```
-
-e:
-
-```text
-editar_produto.html
-    ↓
-UPDATE
-    ↓
-produto existente
-```
-
-Apesar de futuramente ser possível reutilizar partes dos templates, mantê-los separados neste momento ajuda a visualizar a diferença entre **criar** e **editar**.
-
----
-
-# 45. 📋 Formulário de edição
-
-O formulário de edição pode receber os dados atuais do banco através do Jinja:
-
-```html
-<input
-    type="text"
-    name="nome"
-    value="{{ produto['nome'] }}"
-    required
->
-```
-
-Se o banco possuir:
-
-```text
-nome = Água 20L
-```
-
-o navegador poderá apresentar:
-
-```text
-Nome:
-┌──────────────────────┐
-│ Água 20L             │
-└──────────────────────┘
-```
-
-O mesmo princípio pode ser utilizado para preço, estoque e estoque mínimo.
-
-O fluxo fica:
-
-```text
-SQLite
- ↓
-produto
- ↓
-Flask
- ↓
-render_template()
- ↓
-Jinja
- ↓
-HTML
- ↓
-formulário preenchido
-```
-
----
-
-# 46. 🔄 Fluxo completo de edição
-
-O fluxo estudado até aqui pode ser representado assim:
-
-```text
-                  PRODUTOS
-                     │
-                     │ clicar em "Editar"
-                     ▼
-            /produtos/7/editar
-                     │
-                     ▼
-             editar_produto(7)
-                     │
-                     ▼
-             buscar_produto(7)
-                     │
-                     ▼
-                  SQLite
-                     │
-                   SELECT
-                     │
-                     ▼
-                 produto
-                     │
-                     ▼
-             editar_produto.html
-                     │
-                     │ usuário altera
-                     ▼
-                    POST
-                     │
-                     ▼
-               request.form
-                     │
-                     ▼
-              atualizar(7, ...)
-                     │
-                     ▼
-                   UPDATE
-                     │
-                     ▼
-                  commit()
-                     │
-                     ▼
-                 redirect()
-                     │
-                     ▼
-                  /produtos
-```
-
-Esse é um dos primeiros fluxos completos de CRUD estudados no projeto.
-
----
-
-# 47. 🏗️ Estado atual da aplicação
-
-A estrutura atual está evoluindo para:
-
-```text
-agua-facil/
-
-├── .venv/
-│
-├── app.py
-├── database.py
-├── aguaFacil.sql
-│
-├── templates/
-│   ├── base.html
-│   ├── inicio.html
-│   ├── sobre.html
-│   ├── produtos.html
-│   ├── novo_produto.html
-│   └── editar_produto.html
-│
-└── static/
-    ├── css/
-    │   └── style.css
-    │
-    └── js/
-        └── app.js
-```
-
-> A existência de `editar_produto.html` representa a próxima etapa da implementação da edição caso o template ainda esteja sendo criado.
-
----
-
-# 48. 🔗 Arquitetura atual
-
-A separação entre os arquivos está ficando mais clara:
-
-```text
-                 NAVEGADOR
-                     │
-                     ▼
-                  app.py
-                     │
-              rotas Flask
-                     │
-                     ▼
-                database.py
-                     │
-                     ▼
-                  SQLite
-```
-
-Enquanto os templates cuidam da apresentação:
-
-```text
-Flask
-  ↓
-render_template()
-  ↓
-Jinja
-  ↓
-HTML
-  ↓
-Navegador
-```
-
-Essa separação permite que:
-
-- `app.py` cuide das rotas e do fluxo da aplicação;
-- `database.py` cuide das operações com o banco;
-- `templates/` cuide das páginas HTML;
-- `static/` contenha CSS e JavaScript;
-- SQLite armazene os dados.
-
----
-
-# 49. 🔄 Fluxo atual dos produtos
-
-Para listar produtos:
-
-```text
-Navegador
-    ↓
-/produtos
-    ↓
-Flask
-    ↓
-produtos()
-    ↓
-consultar()
-    ↓
-SQLite
-    ↓
-SELECT
-    ↓
-produtos
-    ↓
-Jinja
-    ↓
-produtos.html
-    ↓
-Navegador
-```
-
-Para cadastrar:
-
-```text
-Navegador
-    ↓
-/produtos/novo
-    ↓
-GET
-    ↓
-novo_produto.html
-    ↓
-usuário preenche
-    ↓
-POST
-    ↓
-request.form
-    ↓
-validação
-    ↓
-adicionar()
-    ↓
-INSERT
-    ↓
-commit()
-    ↓
-redirect()
-```
-
-Para editar:
-
-```text
-Navegador
-    ↓
-/produtos/<id>/editar
-    ↓
-GET
-    ↓
-buscar_produto(id)
-    ↓
-SELECT
-    ↓
-formulário preenchido
-    ↓
-POST
-    ↓
-request.form
-    ↓
-atualizar(id, ...)
-    ↓
-UPDATE
-    ↓
-commit()
-    ↓
-redirect()
-```
-
----
-
-# 50. 🧠 O que já aprendi
-
-Até aqui consegui entender os seguintes conceitos:
-
-### Python
-
-```python
-import
-def
-return
-list
-dict
-try
-except
-float()
-int()
-```
-
-### Flask
-
-```python
-Flask()
-@app.route()
-app.run()
-render_template()
-request
-request.form
-redirect()
-url_for()
-```
-
-### HTTP
-
-```text
-GET
-POST
-```
-
-### Jinja
-
-```jinja
-{{ variavel }}
-
-{% for %}
-{% endfor %}
-
-{% extends %}
-{% block %}
-```
-
-### HTML
-
-```html
-<form>
-<input>
-<label>
-<button>
-<a>
-```
-
-### SQLite
-
-```python
-sqlite3.connect()
-sqlite3.Row
-commit()
-close()
-```
-
-### SQL
-
-```sql
-CREATE TABLE
-INSERT
-SELECT
-UPDATE
-DELETE
-WHERE
-ORDER BY
-```
-
-### CRUD
-
-```text
-CREATE → INSERT
-READ   → SELECT
-UPDATE → UPDATE
-DELETE → DELETE
-```
-
-### Segurança
-
-```text
-?
-```
-
-como parâmetros SQL, evitando a montagem insegura de consultas através de strings.
-
----
-
-# 51. 🧠 Conceitos que preciso consolidar
-
-Os próximos pontos de estudo são:
-
-```text
-GET e POST
-     ↓
-request.form
-     ↓
-validação
-     ↓
-redirect()
-     ↓
-url_for()
-     ↓
-UPDATE
-     ↓
-CRUD completo
-```
-
-Também preciso aprofundar:
-
-- tratamento de erros;
-- validação de formulários;
-- edição de registros;
-- exclusão lógica;
-- relacionamento entre tabelas;
-- chaves estrangeiras;
-- `JOIN`;
-- transações;
-- controle de estoque.
-
----
-
-# 52. 🎯 Próximos passos
-
-A evolução planejada para o projeto é:
-
-```text
-[✓] Criar ambiente virtual
-[✓] Instalar Flask
-[✓] Criar primeira rota
-[✓] Criar múltiplas rotas
-[✓] Criar templates
-[✓] Passar dados Python → Jinja
-[✓] Criar banco SQLite
-[✓] Criar tabela de produtos
-[✓] Consultar produtos
-[✓] Utilizar Jinja
-[✓] Criar base.html
-[✓] Utilizar extends e blocks
-[✓] Criar formulário de produto
-[✓] Trabalhar com GET e POST
-[✓] Receber formulário com request.form
-[✓] Validar dados básicos do formulário
-[✓] Inserir produto pelo formulário
-[✓] Utilizar commit() após INSERT
-[✓] Utilizar redirect() / url_for()
-[✓] Criar função buscar_produto()
-[✓] Criar função atualizar()
-[~] Criar e testar edição completa do produto
-[ ] Excluir/desativar produto
-[ ] Criar CRUD completo
-[ ] Criar clientes
-[ ] Criar pedidos
-[ ] Criar itens dos pedidos
-[ ] Relacionar tabelas
-[ ] Controlar estoque
-[ ] Criar entregas
-[ ] Criar caixa
-[ ] Adicionar JavaScript
-[ ] Melhorar CSS/mobile
-```
-
----
-
-# 🚰 Objetivo final
-
-A ideia é transformar os estudos em um sistema semelhante a:
-
-```text
-                 ÁGUA FÁCIL
-
-                      │
-       ┌──────────────┼──────────────┐
-       │              │              │
-   CLIENTES       PRODUTOS        PEDIDOS
-       │              │              │
-       │           ESTOQUE           │
-       │              │              │
-       └──────────────┼──────────────┘
-                      │
-                   ENTREGAS
-                      │
-                    CAIXA
-```
-
-O objetivo não é apenas fazer uma aplicação que funcione.
-
-Quero entender a relação entre:
-
-```text
-HTML
-  ↕
-Jinja
-  ↕
-Flask
-  ↕
-Python
-  ↕
-SQL
-  ↕
-SQLite
-```
-
-para conseguir desenvolver e manter o projeto de forma independente.
-
----
-
-# 📌 Anotações importantes
-
-## Ambiente virtual
+### 1. Clonar o repositório
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate.fish
+git clone https://github.com/Ferreirabento/agua-facil.git
 ```
 
-## Instalar Flask
+### 2. Entrar na pasta do projeto
 
 ```bash
-pip install flask
+cd agua-facil
 ```
 
-## Executar
+### 3. Criar um ambiente virtual
+
+```bash
+python -m venv .venv
+```
+
+### 4. Ativar o ambiente virtual
+
+Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+Windows:
+
+```powershell
+.venv\Scripts\activate
+```
+
+### 5. Instalar o Flask
+
+```bash
+pip install Flask
+```
+
+### 6. Executar a aplicação
 
 ```bash
 python app.py
 ```
 
-## Servidor local
+Após iniciar a aplicação, acesse no navegador:
 
 ```text
 http://127.0.0.1:5000
 ```
 
-## Biblioteca SQLite
-
-```python
-import sqlite3
-```
-
-## Template
-
-```python
-render_template("arquivo.html")
-```
-
-## Passar dados para Jinja
-
-```python
-render_template(
-    "produtos.html",
-    produtos=produtos
-)
-```
-
-## Mostrar variável no Jinja
-
-```jinja
-{{ produto["nome"] }}
-```
-
-## Loop
-
-```jinja
-{% for produto in produtos %}
-
-...
-
-{% endfor %}
-```
-
-## Herança
-
-```jinja
-{% extends "base.html" %}
-```
-
-## Blocos
-
-```jinja
-{% block content %}
-
-...
-
-{% endblock %}
-```
-
-## Consulta SQL parametrizada
-
-```sql
-VALUES (?, ?, ?, ?)
-```
-
-## Conexão SQLite
-
-```python
-conexao = sqlite3.connect("aguaFacil.sql")
-```
-
-## Confirmar alterações
-
-```python
-conexao.commit()
-```
-
-## Fechar conexão
-
-```python
-conexao.close()
-```
-
-## Buscar um único registro
-
-```python
-produto = conexao.execute(
-    "SELECT * FROM produtos WHERE id = ?",
-    (id,)
-).fetchone()
-```
-
-## Atualizar um registro
-
-```sql
-UPDATE produtos
-SET nome = ?, preco = ?, estoque = ?, estoque_minimo = ?
-WHERE id = ?
-```
+> Observação: as instruções de execução poderão ser atualizadas caso novas dependências sejam adicionadas ao projeto.
 
 ---
 
-# 💡 Principal aprendizado até aqui
+## 📚 17. Aprendizados e propósito acadêmico
 
-O projeto começou como:
+O Água Fácil também representa uma oportunidade de aplicar, na prática, conhecimentos relacionados ao curso de Análise e Desenvolvimento de Sistemas.
 
-```text
-return "Olá Água Fácil"
-```
+Durante o desenvolvimento, são trabalhados conceitos como:
 
-e está evoluindo para:
+- Lógica de programação.
+- Desenvolvimento web com Python e Flask.
+- Operações CRUD.
+- Modelagem de banco de dados relacional.
+- SQL e SQLite.
+- Chaves primárias e estrangeiras.
+- Relacionamentos entre entidades.
+- Validação de dados.
+- Separação de responsabilidades.
+- Organização de projetos.
+- Experiência do usuário e responsividade.
+- Testes e manutenção de software.
 
-```text
-                    FLASK
-                      │
-             ┌────────┴────────┐
-             │                 │
-           ROTAS           TEMPLATES
-             │                 │
-           PYTHON             JINJA
-             │                 │
-             └────────┬────────┘
-                      │
-                   SQLITE
-                      │
-                     SQL
-```
-
-O aprendizado mais importante neste momento é perceber que cada camada possui uma responsabilidade.
-
-Quando um usuário edita um produto, por exemplo:
-
-```text
-HTML
- ↓
-POST
- ↓
-Flask
- ↓
-request.form
- ↓
-Python
- ↓
-database.py
- ↓
-UPDATE
- ↓
-SQLite
- ↓
-commit()
- ↓
-redirect()
- ↓
-Flask
- ↓
-Jinja
- ↓
-HTML
-```
-
-Esse fluxo conecta praticamente tudo que foi estudado até agora.
-
-## Próxima etapa
-
-O próximo objetivo é concluir e testar o ciclo de edição:
-
-```text
-/produtos
-    ↓
-Editar
-    ↓
-buscar_produto(id)
-    ↓
-editar_produto.html
-    ↓
-POST
-    ↓
-request.form
-    ↓
-atualizar()
-    ↓
-UPDATE
-    ↓
-SQLite
-    ↓
-redirect()
-    ↓
-/produtos
-```
-
-Depois disso, o projeto poderá avançar para **exclusão/desativação de produtos** e, posteriormente, para **clientes e pedidos**.
+O objetivo não é apenas construir uma aplicação funcional, mas compreender as decisões tomadas durante o desenvolvimento e os motivos pelos quais cada parte do sistema existe.
 
 ---
 
-# 📚 Documentação para consulta
+## 📄 18. Documentação de requisitos
 
-- [Python Documentation](https://docs.python.org/3/)
-- [Flask Documentation](https://flask.palletsprojects.com/)
-- [SQLite Documentation](https://sqlite.org/docs.html)
-- [Jinja Documentation](https://jinja.palletsprojects.com/)
-- [MDN Web Docs](https://developer.mozilla.org/)
+O desenvolvimento do Água Fácil é orientado pelo documento **Água Fácil — Documento de Requisitos do Sistema**, versão 1.0, de 23/11/2026.
+
+Esse documento define:
+
+- Requisitos funcionais.
+- Requisitos não funcionais.
+- Regras de negócio.
+- Modelo de dados previsto.
+- Fluxo principal de utilização.
+- Critérios de conclusão da primeira versão.
+- Funcionalidades fora do escopo inicial.
+
+Ele serve como referência para implementar, testar e evoluir o sistema, evitando que novas funcionalidades sejam adicionadas sem considerar os objetivos originais do projeto.
 
 ---
 
-> **Princípio do projeto:** entender primeiro, abstrair depois.  
-> A aplicação deve crescer junto com meu conhecimento, sem esconder a lógica atrás de abstrações que ainda não compreendo.
+## 👨‍💻 19. Autor
+
+**João Bento**
+
+Estudante de Análise e Desenvolvimento de Sistemas.
+
+Projeto desenvolvido com finalidade acadêmica e prática, buscando aplicar conhecimentos de programação, banco de dados e desenvolvimento de software em um problema real de pequenos comerciantes.
+
+- GitHub: [Ferreirabento](https://github.com/Ferreirabento)
+
+---
+
+**Água Fácil — Organização simples para o dia a dia de quem vende água.**
