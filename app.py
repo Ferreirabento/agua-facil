@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from datetime import datetime
 from database import (criar_tabela_produtos, adicionar_produtos, consultar_produtos, atualizar_produtos, deletar_produtos, buscar_produto,
 criar_tabela_clientes, adicionar_clientes, consultar_clientes, atualizar_clientes, buscar_cliente, deletar_cliente,
 criar_tabelas_pedidos, consultar_pedidos, adicionar_pedidos, 
@@ -10,6 +11,11 @@ criar_tabela_produtos()
 criar_tabela_clientes()
 criar_tabelas_pedidos()
 criar_tabela_iten_pedido()
+
+@app.template_filter('data_br')
+def data_br(valor):
+    data = datetime.fromisoformat(valor)
+    return data.strftime('%d-%m-%y')
 
 @app.route('/')
 def inicio():
