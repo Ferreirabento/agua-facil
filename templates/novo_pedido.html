@@ -1,29 +1,75 @@
 {% extends "base.html" %}
 {% block title %}Novo Pedido{% endblock %}
+
 {% block content %}
 <h2>Novo Pedido</h2>
+
 <form method="POST">
+
     <label for="cliente_id">Cliente:</label>
     <select name="cliente_id" id="cliente_id" required>
         <option value="">Selecione um cliente</option>
+
         {% for cliente in clientes %}
             <option value="{{ cliente['id'] }}">
                 {{ cliente['nome'] }}
             </option>
         {% endfor %}
     </select>
-    <label for="produto_id">Produto</label>
-    <select name="produto_id" id="produto_id" required>
-        <option value="">Selecione um produto</option>
-        {% for produto in produtos %}
-            <option value="{{ produto['id'] }}">
-                {{ produto['nome'] }}
-            </option>
-        {% endfor %}
-    </select>
-    <label for="quantidade">Quantidade</label>
-    <input type="number" name="quantidade" id="quantidade" min="1" required>
-    <button type="submit">Cadastrar pedido</button>
+
+    <h3>Produtos do pedido</h3>
+
+    {% for linha in linhas %}
+        <div>
+            <h4>Produto {{ loop.index }}</h4>
+
+            <label for="produto_{{ loop.index }}">
+                Produto:
+            </label>
+
+            <select name="produto_id"
+                    id="produto_{{ loop.index }}"
+                    required>
+
+                <option value="">Selecione um produto</option>
+
+                {% for produto in produtos %}
+                    <option
+                        value="{{ produto['id'] }}"
+                        {% if linha.produto_id == produto['id'] | string %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ produto['nome'] }}
+                    </option>
+                {% endfor %}
+
+            </select>
+
+            <label for="quantidade_{{ loop.index }}">
+                Quantidade:
+            </label>
+
+            <input
+                type="number"
+                name="quantidade"
+                id="quantidade_{{ loop.index }}"
+                min="1"
+                value="{{ linha.quantidade }}"
+                required
+            >
+        </div>
+    {% endfor %}
+
+    <button type="submit" name="acao" value="adicionar_item">
+        + Adicionar produto
+    </button>
+
+    <button type="submit" name="acao" value="cadastrar">
+        Cadastrar pedido
+    </button>
+
     <a href="{{ url_for('pedidos') }}">Voltar</a>
+
 </form>
 {% endblock %}

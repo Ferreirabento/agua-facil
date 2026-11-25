@@ -124,68 +124,53 @@ def pedidos():
 
 @app.route('/pedidos/novo', methods=['GET', 'POST'])
 def novo_pedido():
+
     listar_cliente = consultar_clientes()
     listar_produtos = consultar_produtos()
 
+    # Primeira linha vazia
+    linhas = [
+        {
+            'produto_id': '',
+            'quantidade': ''
+        }
+    ]
+
     if request.method == 'POST':
 
-        # 1. Validar o cliente selecionado
-        try:
-            cliente_id = int(request.form['cliente_id'])
-        except (ValueError, KeyError):
-            return "Selecione um cliente válido", 400
+        # Recupera todos os produtos e quantidades enviados
+        produto_ids = request.form.getlist('produto_id')
+        quantidades = request.form.getlist('quantidade')
 
-        cliente = buscar_cliente(cliente_id)
+        # Organiza os dados em uma lista de dicionários
+        linhas = []
 
-        if cliente is None or cliente['ativo'] != 1:
-            return "Cliente não encontrado ou indisponível", 400
+        for produto_id, quantidade in zip(produto_ids, quantidades):
+            linhas.append({
+                'produto_id': produto_id,
+                'quantidade': quantidade
+            })
 
-        # 2. Validar o produto selecionado
-        try:
-            produto_id = int(request.form['produto_id'])
-        except (ValueError, KeyError):
-            return "Selecione um produto válido", 400
+        # Verifica qual botão foi pressionado
+        acao = request.form.get('acao')
 
-        produto = buscar_produto(produto_id)
+        if acao == 'adicionar_item':
 
-        if produto is None or produto['ativo'] != 1:
-            return "Produto não encontrado ou indisponível", 400
+            # Acrescenta uma nova linha vazia
+            linhas.append({
+                'produto_id': '',
+                'quantidade': ''
+            })
 
-        # 3. Validar a quantidade
-        try:
-            quantidade = int(request.form['quantidade'])
-        except (ValueError, KeyError):
-            return "Informe uma quantidade válida", 400
-
-        if quantidade <= 0:
-            return "A quantidade deve ser maior que zero", 400
-
-        # 4. Verificar disponibilidade do estoque
-        if quantidade > produto['estoque']:
-            return "Estoque insuficiente para este pedido", 400
-
-        # 5. Recuperar o preço praticado no momento da venda
-        preco_unitario = produto['preco']
-
-        # 6. Registrar o pedido e seu item
-        pedido_id = adicionar_pedidos(cliente_id)
-
-        adicionar_itens_pedidos(
-            pedido_id,
-            produto_id,
-            quantidade,
-            preco_unitario
-        )
-
-        return redirect(url_for('pedidos'))
+        elif acao == 'cadastrar':
+            return "O cadastro definitivo será implementado na próxima etapa."
 
     return render_template(
         'novo_pedido.html',
         clientes=listar_cliente,
-        produtos=listar_produtos
+        produtos=listar_produtos,
+        linhas=linhas
     )
-
-
 
 
 if __name__ == "__main__":
