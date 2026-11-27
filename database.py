@@ -137,3 +137,53 @@ def adicionar_itens_pedidos(pedido_id, produto_id, quantidade, preco_unitario):
     conexao.commit()
     conexao.close()
     return item_id
+
+# Operações auxiliares para o cadastro transacional de pedidos.
+# Estas funções recebem uma conexão existente: não abrem conexão,
+# não executam commit() e não fecham a conexão.
+
+def buscar_cliente_na_conexao(conexao, cliente_id):
+    return conexao.execute(
+        """SELECT id FROM clientes WHERE id = ? AND ativo = 1""",
+        (cliente_id,)
+    ).fetchone()
+
+
+def criar_pedido_na_conexao(conexao, cliente_id):
+    data_pedido = datetime.now().isoformat(timespec="seconds")
+    cursor = conexao.execute(
+        """INSERT INTO pedidos (cliente_id, data_pedido)
+        VALUES (?, ?)""",
+        (cliente_id, data_pedido)
+    )
+    return cursor.lastrowid
+
+
+def buscar_produto_na_conexao(conexao, produto_id):
+    return conexao.execute(
+        """SELECT id, preco, estoque
+        FROM produtos
+        WHERE id = ? AND ativo = 1""",
+        (produto_id,)
+    ).fetchone()
+
+
+def descontar_estoque_na_conexao(conexao, produto_id, quantidade):
+    return conexao.execute(
+        """UPDATE produtos
+        SET estoque = estoque - ?
+        WHERE id = ? AND ativo = 1 AND estoque >= ?""",
+        (quantidade, produto_id, quantidade)
+    ).rowcount
+
+
+def criar_item_pedido_na_conexao(
+    conexao, pedido_id, produto_id, quantidade, preco_unitario
+):
+    cursor = conexao.execute(
+        """INSERT INTO itens_pedido
+        (pedido_id, produto_id, quantidade, preco_unitario)
+        VALUES (?, ?, ?, ?)""",
+        (pedido_id, produto_id, quantidade, preco_unitario)
+    )
+    return cursor.lastrowid
