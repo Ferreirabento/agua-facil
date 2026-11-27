@@ -4,6 +4,10 @@
 {% block content %}
 <h2>Novo Pedido</h2>
 
+{% if erro %}
+    <p role="alert">{{ erro }}</p>
+{% endif %}
+
 <form method="POST">
 
     <label for="cliente_id">Cliente:</label>
@@ -11,7 +15,8 @@
         <option value="">Selecione um cliente</option>
 
         {% for cliente in clientes %}
-            <option value="{{ cliente['id'] }}">
+            <option value="{{ cliente['id'] }}"
+                {% if cliente_selecionado == cliente['id'] | string %}selected{% endif %}>
                 {{ cliente['nome'] }}
             </option>
         {% endfor %}
@@ -61,7 +66,7 @@
         </div>
     {% endfor %}
 
-    <button type="submit" name="acao" value="adicionar_item">
+    <button type="submit" name="acao" value="adicionar_item" formnovalidate>
         + Adicionar produto
     </button>
 
